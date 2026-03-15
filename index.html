@@ -1,47 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Space</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>The Quiet Club</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
-  <aside class="sidebar">
+  <aside class="sidebar-card">
+    <img src="https://via.placeholder.com/70" class="avatar">
 
-    <div class="profile-top">
-      <img src="https://via.placeholder.com/60" class="avatar">
+    <h1>Your Name</h1>
+    <p class="username">@yourname</p>
+    <p>Your description here.</p>
 
-      <div class="profile-info">
-        <h2>Your Name</h2>
-        <span>@yourname</span>
-      </div>
-    </div>
-
-    <div class="about-card">
-      <p>Your description here.</p>
-    </div>
-
-    <a href="https://secreto.site" target="_blank" class="message-link">
-      Leave a message
-    </a>
-
+    <a href="https://secreto.site/" target="_blank">Leave a message</a>
   </aside>
 
-  <main class="feed" id="feed">
-
-    <div class="post-card">
-      <p>hola</p>
-    </div>
-
-  </main>
+  <main class="feed" id="feed"></main>
 
 </div>
 
-<script type="module" src="app.js"></script>
+<script type="module">
+import { db } from './firebase-config.js';
+
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+const feed = document.getElementById('feed');
+
+async function loadPosts() {
+  const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+
+  snapshot.forEach(doc => {
+    const post = doc.data();
+
+    const card = document.createElement('div');
+    card.className = 'post-card';
+
+    if (post.mediaUrl) {
+      card.innerHTML += `<img src="${post.mediaUrl}" class="post-image">`;
+    }
+
+    if (post.text) {
+      card.innerHTML += `<p>${post.text}</p>`;
+    }
+
+    feed.appendChild(card);
+  });
+}
+
+loadPosts();
+</script>
 
 </body>
 </html>
