@@ -2,35 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
 <div class="admin-box">
 
+<section>
 <h2>Profile</h2>
-
 <input id="name" placeholder="Name">
 <input id="username" placeholder="Username">
 <textarea id="description" placeholder="Description"></textarea>
 <input type="file" id="avatar">
+</section>
 
+<section>
 <h2>Links</h2>
-
 <input id="buttonName" placeholder="Button name">
 <input id="buttonLink" placeholder="Button link">
+</section>
 
+<section>
 <h2>Create Post</h2>
-
 <textarea id="postText" placeholder="Write something..."></textarea>
 <input type="file" id="postFile">
+</section>
 
+<section>
 <h2>Appearance</h2>
-
-<input id="bgColor" placeholder="Background color (#ffffff)">
+<input id="bgColor" placeholder="Background color">
 <input type="file" id="bgImage">
 <input id="fontFamily" placeholder="Font family">
+</section>
 
 <button id="save">Save Everything</button>
 
