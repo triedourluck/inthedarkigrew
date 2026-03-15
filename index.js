@@ -12,17 +12,9 @@ async function loadSite() {
   if (profileSnap.exists()) {
     const data = profileSnap.data();
 
-    if (data.name) {
-      document.getElementById("name").textContent = data.name;
-    }
-
-    if (data.username) {
-      document.getElementById("username").textContent = data.username;
-    }
-
-    if (data.description) {
-      document.getElementById("description").textContent = data.description;
-    }
+    document.getElementById("name").textContent = data.name || "your name";
+    document.getElementById("username").textContent = data.username || "@username";
+    document.getElementById("description").textContent = data.description || "";
 
     if (data.avatarURL) {
       document.getElementById("avatar").src = data.avatarURL;
@@ -33,19 +25,6 @@ async function loadSite() {
         <a href="${data.buttonLink}" target="_blank">${data.buttonName}</a>
       `;
     }
-
-    if (data.bgColor) {
-      document.body.style.backgroundColor = data.bgColor;
-    }
-
-    if (data.bgURL) {
-      document.body.style.backgroundImage = `url(${data.bgURL})`;
-      document.body.style.backgroundSize = "cover";
-    }
-
-    if (data.fontFamily) {
-      document.body.style.fontFamily = data.fontFamily;
-    }
   }
 
   const postsSnap = await getDocs(collection(db, "posts"));
@@ -53,15 +32,21 @@ async function loadSite() {
 
   postsContainer.innerHTML = "";
 
-  postsSnap.forEach((docItem) => {
+  postsSnap.forEach(docItem => {
     const post = docItem.data();
 
     const div = document.createElement("div");
     div.className = "post-box";
 
+    let media = "";
+
+    if (post.media) {
+      media = `<img src="${post.media}">`;
+    }
+
     div.innerHTML = `
       <p>${post.text || ""}</p>
-      ${post.media ? `<img src="${post.media}" style="width:100%; margin-top:10px;">` : ""}
+      ${media}
     `;
 
     postsContainer.appendChild(div);
