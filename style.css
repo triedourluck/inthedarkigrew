@@ -6,23 +6,19 @@ body {
 }
 
 .container {
-  max-width: 1100px;
-  margin: 60px auto;
+  width: 1000px;
+  margin: 70px auto;
   display: flex;
-  gap: 90px;
   align-items: flex-start;
+  gap: 80px;
 }
 
 .sidebar {
   width: 220px;
-  position: sticky;
-  top: 100px;
 }
 
 .profile-card {
-  background: transparent;
-  border: none;
-  padding: 0;
+  width: 100%;
 }
 
 .avatar {
@@ -30,19 +26,21 @@ body {
   height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 15px;
+  display: block;
+  margin-bottom: 18px;
 }
 
 .sidebar h1 {
   font-size: 2rem;
   font-weight: normal;
-  margin: 10px 0 8px;
+  margin: 0 0 10px 0;
 }
 
 .sidebar p {
   color: #777;
   font-size: 0.95rem;
   line-height: 1.5;
+  margin: 0;
 }
 
 .message-link {
@@ -58,25 +56,25 @@ body {
 }
 
 .feed {
-  width: 520px;
+  width: 540px;
 }
 
 .post-card {
   background: white;
   border-radius: 4px;
-  padding: 28px;
-  margin-bottom: 30px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
+  padding: 30px;
+  margin-bottom: 35px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+.post-card p {
+  margin: 0;
+  line-height: 1.7;
 }
 
 .post-card img,
 .post-card video {
   width: 100%;
   border-radius: 4px;
-  margin-top: 10px;
-}
-
-.post-card p {
-  margin: 0;
-  line-height: 1.7;
+  margin-top: 15px;
 }
