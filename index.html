@@ -1,35 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Quiet Club</title>
-  <link rel="stylesheet" href="./style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Quiet Club</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
 
-<div class="layout">
+<div class="container">
 
-  <div class="profile-column">
+<!-- LEFT PROFILE COLUMN -->
 
-    <div class="profile-header">
-      <img id="avatar" src="https://via.placeholder.com/70" alt="avatar">
+<div class="profile">
 
-      <div class="profile-info">
-        <h1 id="name">your name</h1>
-        <p id="username">@username</p>
-      </div>
-    </div>
+<div class="profile-header">
 
-    <div class="description-box">
-      <p id="description">your description here</p>
-    </div>
+<img id="avatar" src="https://via.placeholder.com/80">
 
-    <a id="message-link" href="#">Leave a message</a>
+<div class="profile-text">
 
-  </div>
+<h1 id="name">your name</h1>
+<p id="username">@username</p>
 
-  <div id="posts"></div>
+</div>
+</div>
+
+<div class="bio-box">
+<p id="description">your description here</p>
+</div>
+
+<a class="message-btn" href="#">Leave a message</a>
+
+</div>
+
+
+<!-- POSTS COLUMN -->
+
+<div class="posts">
+
+<div class="post">
+<img src="https://picsum.photos/500/300">
+</div>
+
+<div class="post">
+<p>Sometimes the smallest things take up the most room in your heart.</p>
+</div>
+
+</div>
 
 </div>
 
