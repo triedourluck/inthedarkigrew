@@ -8,23 +8,38 @@
 </head>
 <body>
 
-  <header class="profile">
-    <h1 id="profileName">Your Name</h1>
-    <p id="profileBio">Your description here.</p>
-  </header>
+<div class="container">
 
-  <main id="posts"></main>
+  <aside class="sidebar">
+    <div class="profile-card">
+      <img src="https://via.placeholder.com/80" class="avatar">
+      <h2 id="profileName">Your Name</h2>
+      <p id="profileBio">Your description here.</p>
+    </div>
 
-  <section class="anonymous-box">
-    <h2>Leave a message</h2>
-    <textarea id="anonMessage" placeholder="Write something..."></textarea>
-    <button onclick="sendMessage()">Send</button>
-  </section>
+    <nav>
+      <a href="#">home</a>
+      <a href="#">archive</a>
+      <a href="#">about</a>
+    </nav>
+  </aside>
 
-  <section id="messages"></section>
+  <main class="feed">
+    <div id="posts"></div>
 
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="app.js"></script>
+    <section class="anonymous-box">
+      <h3>Leave a message</h3>
+      <textarea id="anonMessage" placeholder="Write something..."></textarea>
+      <button onclick="sendMessage()">Send</button>
+    </section>
+
+    <section id="messages"></section>
+  </main>
+
+</div>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="app.js"></script>
 
 </body>
 </html>
