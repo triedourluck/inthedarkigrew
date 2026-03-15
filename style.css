@@ -8,16 +8,20 @@ body {
 
 .layout {
   width: 100%;
-  max-width: 760px;
+  max-width: 1100px;
   margin: 80px auto;
-  padding: 20px;
+  padding-left: 120px;
+}
+
+.profile-column {
+  width: 320px;
 }
 
 .profile-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 #avatar {
@@ -26,6 +30,7 @@ body {
   border-radius: 50%;
   object-fit: cover;
   background: #ddd;
+  flex-shrink: 0;
 }
 
 .profile-info h1 {
@@ -43,7 +48,7 @@ body {
 .description-box {
   background: white;
   border-radius: 10px;
-  padding: 22px;
+  padding: 24px;
   width: 320px;
   line-height: 1.7;
   box-shadow: 0 1px 6px rgba(0,0,0,0.04);
@@ -57,7 +62,7 @@ body {
 
 #message-link {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 22px;
   text-decoration: none;
   color: #444;
   font-size: 14px;
