@@ -1,48 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="admin.css">
+<meta charset="UTF-8">
+<title>Admin</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="admin-container">
+<div class="admin-panel">
+  <h2>Create Post</h2>
 
-  <h1>Admin Panel</h1>
+  <textarea id="postText" placeholder="Write something..."></textarea>
 
-  <section class="section">
-    <h2>Profile Settings</h2>
+  <input type="file" id="postFile">
 
-    <input id="name" placeholder="Name">
-    <input id="username" placeholder="@username">
-    <textarea id="description" placeholder="Description"></textarea>
-    <input id="avatar" type="file">
-    <input id="messageLink" placeholder="Leave a message link">
-
-    <button onclick="saveProfile()">Save Profile</button>
-  </section>
-
-  <section class="section">
-    <h2>Extra Button</h2>
-
-    <input id="buttonText" placeholder="Button text">
-    <input id="buttonLink" placeholder="Button link">
-
-    <button onclick="saveButton()">Add Button</button>
-  </section>
-
-  <section class="section">
-    <h2>Create Post</h2>
-
-    <textarea id="postText" placeholder="Write your post"></textarea>
-    <input id="media" type="file">
-
-    <button onclick="publishPost()">Publish</button>
-  </section>
-
+  <button id="publishBtn">Publish</button>
 </div>
 
-<script type="module" src="admin.js"></script>
+<script type="module">
+import { db, storage } from './firebase-config.js';
+
+import {
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+
+const publishBtn = document.getElementById('publishBtn');
+
+publishBtn.addEventListener('click', async () => {
+  const text = document.getElementById('postText').value;
+  const file = document.getElementById('postFile').files[0];
+
+  let mediaUrl = '';
+
+  if (file) {
+    const storageRef = ref(storage, 'posts/' + file.name);
+    await uploadBytes(storageRef, file);
+    mediaUrl = await getDownloadURL(storageRef);
+  }
+
+  await addDoc(collection(db, 'posts'), {
+    text,
+    mediaUrl,
+    createdAt: serverTimestamp()
+  });
+
+  alert('Post published');
+});
+</script>
+
 </body>
 </html>
