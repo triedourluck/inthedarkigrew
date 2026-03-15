@@ -1,9 +1,9 @@
 import { db, storage } from "./firebase-config.js";
 import {
-  collection,
-  addDoc,
   doc,
-  setDoc
+  setDoc,
+  collection,
+  addDoc
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 import {
@@ -12,59 +12,61 @@ import {
   getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-async function saveProfile() {
+document.getElementById("save").addEventListener("click", async () => {
   const name = document.getElementById("name").value;
   const username = document.getElementById("username").value;
   const description = document.getElementById("description").value;
-  const link = document.getElementById("messageLink").value;
-  const avatarFile = document.getElementById("avatar").files[0];
+  const buttonName = document.getElementById("buttonName").value;
+  const buttonLink = document.getElementById("buttonLink").value;
+  const postText = document.getElementById("postText").value;
+  const bgColor = document.getElementById("bgColor").value;
+  const fontFamily = document.getElementById("fontFamily").value;
 
   let avatarURL = "";
+  let postURL = "";
+  let bgURL = "";
+
+  const avatarFile = document.getElementById("avatar").files[0];
+  const postFile = document.getElementById("postFile").files[0];
+  const bgFile = document.getElementById("bgImage").files[0];
 
   if (avatarFile) {
-    const storageRef = ref(storage, "avatar/" + avatarFile.name);
-    await uploadBytes(storageRef, avatarFile);
-    avatarURL = await getDownloadURL(storageRef);
+    const avatarRef = ref(storage, "avatar/" + avatarFile.name);
+    await uploadBytes(avatarRef, avatarFile);
+    avatarURL = await getDownloadURL(avatarRef);
   }
 
-  await setDoc(doc(db, "profile", "main"), {
+  if (postFile) {
+    const postRef = ref(storage, "posts/" + postFile.name);
+    await uploadBytes(postRef, postFile);
+    postURL = await getDownloadURL(postRef);
+  }
+
+  if (bgFile) {
+    const bgRef = ref(storage, "background/" + bgFile.name);
+    await uploadBytes(bgRef, bgFile);
+    bgURL = await getDownloadURL(bgRef);
+  }
+
+  await setDoc(doc(db, "site", "profile"), {
     name,
     username,
     description,
-    link,
-    avatar: avatarURL
+    avatarURL,
+    buttonName,
+    buttonLink,
+    bgColor,
+    bgURL,
+    fontFamily
   });
-}
 
-async function saveButton() {
-  const text = document.getElementById("buttonText").value;
-  const link = document.getElementById("buttonLink").value;
-
-  await addDoc(collection(db, "buttons"), {
-    text,
-    link
-  });
-}
-
-async function publishPost() {
-  const text = document.getElementById("postText").value;
-  const mediaFile = document.getElementById("media").files[0];
-
-  let mediaURL = "";
-
-  if (mediaFile) {
-    const storageRef = ref(storage, "posts/" + mediaFile.name);
-    await uploadBytes(storageRef, mediaFile);
-    mediaURL = await getDownloadURL(storageRef);
+  if (postText || postURL) {
+    await addDoc(collection(db, "posts"), {
+      text: postText,
+      media: postURL,
+      created: Date.now()
+    });
   }
 
-  await addDoc(collection(db, "posts"), {
-    text,
-    media: mediaURL,
-    createdAt: Date.now()
-  });
-}
-
-window.saveProfile = saveProfile;
-window.saveButton = saveButton;
-window.publishPost = publishPost;
+  alert("Saved");
+});
