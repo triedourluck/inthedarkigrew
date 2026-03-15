@@ -15,13 +15,16 @@ body {
 
 .sidebar {
   width: 260px;
+  background: white;
+  padding: 22px;
+  border-radius: 4px;
 }
 
 .profile-top {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .avatar {
@@ -43,15 +46,18 @@ body {
 }
 
 .about-card {
-  background: white;
-  padding: 18px;
-  border-radius: 4px;
-  margin-bottom: 18px;
+  margin-top: 12px;
   font-size: 14px;
   line-height: 1.7;
 }
 
+.about-card p {
+  margin: 0;
+}
+
 .message-link {
+  display: inline-block;
+  margin-top: 18px;
   text-decoration: none;
   color: #666;
   font-size: 14px;
