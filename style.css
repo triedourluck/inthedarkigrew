@@ -9,27 +9,23 @@ body {
 .layout {
   width: 100%;
   max-width: 760px;
-  margin: 60px auto;
+  margin: 80px auto;
   padding: 20px;
 }
 
-.profile-card {
+.profile-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 #avatar {
-  width: 64px;
-  height: 64px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
   background: #ddd;
-}
-
-#avatar[src=""] {
-  display: none;
 }
 
 .profile-info h1 {
@@ -39,7 +35,7 @@ body {
 }
 
 .profile-info p {
-  margin: 3px 0 0;
+  margin: 4px 0 0;
   color: #777;
   font-size: 14px;
 }
@@ -47,47 +43,26 @@ body {
 .description-box {
   background: white;
   border-radius: 10px;
-  padding: 24px;
-  max-width: 320px;
-  line-height: 1.8;
+  padding: 22px;
+  width: 320px;
+  line-height: 1.7;
   box-shadow: 0 1px 6px rgba(0,0,0,0.04);
 }
 
 #description {
+  margin: 0;
   font-size: 15px;
   color: #444;
-  margin-bottom: 16px;
 }
 
-#extra-links {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-#extra-links a,
 #message-link {
+  display: inline-block;
+  margin-top: 14px;
   text-decoration: none;
-  color: #666;
+  color: #444;
   font-size: 14px;
 }
 
-#posts {
-  margin-top: 40px;
-  display: grid;
-  gap: 24px;
-}
-
-.post-box {
-  background: white;
-  border-radius: 10px;
-  padding: 22px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
-}
-
-.post-box img {
-  width: 100%;
-  border-radius: 8px;
-  margin-top: 14px;
+#message-link:hover {
+  opacity: 0.7;
 }
