@@ -3,7 +3,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAM3U4vXMDfka22-tSv9QVUoo2CFJ85LgU",
+  apiKey: "AIzaSyAmlJ4vXMDFka22-tSv9QVUoo2CEJ85LgU",
   authDomain: "thequietclub-7265a.firebaseapp.com",
   projectId: "thequietclub-7265a",
   storageBucket: "thequietclub-7265a.firebasestorage.app",
