@@ -16,15 +16,16 @@ body {
 .sidebar {
   width: 260px;
   background: white;
-  padding: 22px;
+  padding: 25px;
   border-radius: 4px;
+  min-height: 220px;
 }
 
 .profile-top {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .avatar {
