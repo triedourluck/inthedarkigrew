@@ -1,64 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>The Quiet Club</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Quiet Club</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+  <main class="container">
 
-  <aside class="sidebar-card">
-    <img src="https://via.placeholder.com/70" class="avatar">
+    <section class="profile-section">
+      <img id="avatar" src="" alt="avatar">
 
-    <h1>Your Name</h1>
-    <p class="username">@yourname</p>
-    <p>Your description here.</p>
+      <h1 id="name">Your Name</h1>
 
-    <a href="https://secreto.site/" target="_blank">Leave a message</a>
-  </aside>
+      <p id="username">@yourname</p>
 
-  <main class="feed" id="feed"></main>
+      <p id="description">Your description here.</p>
 
-</div>
+      <div id="extra-links"></div>
 
-<script type="module">
-import { db } from './firebase-config.js';
+      <a id="message-link" href="#">Leave a message</a>
+    </section>
 
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    <section id="posts"></section>
 
-const feed = document.getElementById('feed');
+  </main>
 
-async function loadPosts() {
-  const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
-  const snapshot = await getDocs(q);
-
-  snapshot.forEach(doc => {
-    const post = doc.data();
-
-    const card = document.createElement('div');
-    card.className = 'post-card';
-
-    if (post.mediaUrl) {
-      card.innerHTML += `<img src="${post.mediaUrl}" class="post-image">`;
-    }
-
-    if (post.text) {
-      card.innerHTML += `<p>${post.text}</p>`;
-    }
-
-    feed.appendChild(card);
-  });
-}
-
-loadPosts();
-</script>
+  <script type="module" src="index.js"></script>
 
 </body>
 </html>
