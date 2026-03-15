@@ -7,54 +7,36 @@
 </head>
 <body>
 
-<div class="admin-panel">
-  <h2>Create Post</h2>
+<div class="admin-box">
 
-  <textarea id="postText" placeholder="Write something..."></textarea>
+<h2>Profile</h2>
 
-  <input type="file" id="postFile">
+<input id="name" placeholder="Name">
+<input id="username" placeholder="Username">
+<textarea id="description" placeholder="Description"></textarea>
+<input type="file" id="avatar">
 
-  <button id="publishBtn">Publish</button>
+<h2>Links</h2>
+
+<input id="buttonName" placeholder="Button name">
+<input id="buttonLink" placeholder="Button link">
+
+<h2>Create Post</h2>
+
+<textarea id="postText" placeholder="Write something..."></textarea>
+<input type="file" id="postFile">
+
+<h2>Appearance</h2>
+
+<input id="bgColor" placeholder="Background color (#ffffff)">
+<input type="file" id="bgImage">
+<input id="fontFamily" placeholder="Font family">
+
+<button id="save">Save Everything</button>
+
 </div>
 
-<script type="module">
-import { db, storage } from './firebase-config.js';
-
-import {
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-
-const publishBtn = document.getElementById('publishBtn');
-
-publishBtn.addEventListener('click', async () => {
-  const text = document.getElementById('postText').value;
-  const file = document.getElementById('postFile').files[0];
-
-  let mediaUrl = '';
-
-  if (file) {
-    const storageRef = ref(storage, 'posts/' + file.name);
-    await uploadBytes(storageRef, file);
-    mediaUrl = await getDownloadURL(storageRef);
-  }
-
-  await addDoc(collection(db, 'posts'), {
-    text,
-    mediaUrl,
-    createdAt: serverTimestamp()
-  });
-
-  alert('Post published');
-});
-</script>
+<script type="module" src="admin.js"></script>
 
 </body>
 </html>
