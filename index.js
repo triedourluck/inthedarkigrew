@@ -7,54 +7,87 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 async function loadSite() {
-  const profileRef = doc(db, "site", "profile");
-  const profileSnap = await getDoc(profileRef);
+
+  // PROFILE
+  const profileSnap = await getDoc(doc(db, "site", "profile"));
 
   if (profileSnap.exists()) {
-    const data = profileSnap.data();
+    const profile = profileSnap.data();
 
-    if (data.name) document.getElementById("name").textContent = data.name;
-    if (data.username) document.getElementById("username").textContent = data.username;
-    if (data.description) document.getElementById("description").textContent = data.description;
-
-    if (data.avatarURL && document.getElementById("avatar")) {
-      document.getElementById("avatar").src = data.avatarURL;
+    if (profile.name) {
+      document.getElementById("name").textContent = profile.name;
     }
 
-    if (data.bgColor) {
-      document.body.style.backgroundColor = data.bgColor;
+    if (profile.username) {
+      document.getElementById("username").textContent = profile.username;
     }
 
-    if (data.bgURL) {
-      document.body.style.backgroundImage = `url(${data.bgURL})`;
-      document.body.style.backgroundSize = "cover";
+    if (profile.description) {
+      document.getElementById("description").textContent = profile.description;
     }
 
-    if (data.fontFamily) {
-      document.body.style.fontFamily = data.fontFamily;
+    if (profile.avatarURL) {
+      document.getElementById("avatar").src = profile.avatarURL;
     }
   }
 
-  const postsContainer = document.getElementById("posts");
-  if (!postsContainer) return;
+  // LINKS
+  const linksSnap = await getDoc(doc(db, "site", "links"));
 
+  if (linksSnap.exists()) {
+    const links = linksSnap.data();
+
+    const linksContainer = document.getElementById("extra-links");
+
+    if (links.buttonName && links.buttonLink && linksContainer) {
+      linksContainer.innerHTML = `
+        <a href="${links.buttonLink}" target="_blank">${links.buttonName}</a>
+      `;
+    }
+  }
+
+  // APPEARANCE
+  const appearanceSnap = await getDoc(doc(db, "site", "appearance"));
+
+  if (appearanceSnap.exists()) {
+    const appearance = appearanceSnap.data();
+
+    if (appearance.bgColor) {
+      document.body.style.backgroundColor = appearance.bgColor;
+    }
+
+    if (appearance.bgURL) {
+      document.body.style.backgroundImage = `url(${appearance.bgURL})`;
+      document.body.style.backgroundSize = "cover";
+    }
+
+    if (appearance.fontFamily) {
+      document.body.style.fontFamily = appearance.fontFamily;
+    }
+  }
+
+  // POSTS
   const postsSnap = await getDocs(collection(db, "posts"));
 
-  postsContainer.innerHTML = "";
+  const postsContainer = document.getElementById("posts");
 
-  postsSnap.forEach(docItem => {
-    const post = docItem.data();
+  if (postsContainer) {
+    postsContainer.innerHTML = "";
 
-    const div = document.createElement("div");
-    div.className = "post-box";
+    postsSnap.forEach(docItem => {
+      const post = docItem.data();
 
-    div.innerHTML = `
-      <p>${post.text || ""}</p>
-      ${post.media ? `<img src="${post.media}" style="width:100%; margin-top:10px;">` : ""}
-    `;
+      const div = document.createElement("div");
+      div.className = "post-box";
 
-    postsContainer.appendChild(div);
-  });
+      div.innerHTML = `
+        <p>${post.text || ""}</p>
+        ${post.media ? `<img src="${post.media}" style="width:100%; margin-top:10px;">` : ""}
+      `;
+
+      postsContainer.appendChild(div);
+    });
+  }
 }
 
 loadSite();
