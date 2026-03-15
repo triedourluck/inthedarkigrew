@@ -7,23 +7,27 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 async function loadSite() {
-  const profile = await getDoc(doc(db, "site", "profile"));
+  const profileRef = doc(db, "site", "profile");
+  const profileSnap = await getDoc(profileRef);
 
-  if (profile.exists()) {
-    const data = profile.data();
+  if (profileSnap.exists()) {
+    const data = profileSnap.data();
 
-    document.getElementById("name").textContent = data.name;
-    document.getElementById("username").textContent = data.username;
-    document.getElementById("description").textContent = data.description;
+    if (data.name) document.getElementById("name").textContent = data.name;
+    if (data.username) document.getElementById("username").textContent = data.username;
+    if (data.description) document.getElementById("description").textContent = data.description;
 
-    if (data.avatarURL) {
+    if (data.avatarURL && document.getElementById("avatar")) {
       document.getElementById("avatar").src = data.avatarURL;
     }
 
-    document.body.style.background = data.bgColor || "#f5f5f5";
+    if (data.bgColor) {
+      document.body.style.backgroundColor = data.bgColor;
+    }
 
     if (data.bgURL) {
       document.body.style.backgroundImage = `url(${data.bgURL})`;
+      document.body.style.backgroundSize = "cover";
     }
 
     if (data.fontFamily) {
@@ -31,18 +35,25 @@ async function loadSite() {
     }
   }
 
-  const posts = await getDocs(collection(db, "posts"));
-  const container = document.getElementById("posts");
+  const postsContainer = document.getElementById("posts");
+  if (!postsContainer) return;
 
-  posts.forEach(doc => {
-    const post = doc.data();
+  const postsSnap = await getDocs(collection(db, "posts"));
 
-    container.innerHTML += `
-      <div class="post-box">
-        <p>${post.text}</p>
-        ${post.media ? `<img src="${post.media}" style="width:100%;">` : ""}
-      </div>
+  postsContainer.innerHTML = "";
+
+  postsSnap.forEach(docItem => {
+    const post = docItem.data();
+
+    const div = document.createElement("div");
+    div.className = "post-box";
+
+    div.innerHTML = `
+      <p>${post.text || ""}</p>
+      ${post.media ? `<img src="${post.media}" style="width:100%; margin-top:10px;">` : ""}
     `;
+
+    postsContainer.appendChild(div);
   });
 }
 
