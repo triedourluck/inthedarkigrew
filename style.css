@@ -1,86 +1,73 @@
 body {
   margin: 0;
-  padding: 40px;
-  background: #f3f3f3;
+  padding: 0;
+  background: #f6f6f4;
   font-family: Georgia, serif;
-  color: #222;
+  color: #111;
 }
 
 .container {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  gap: 50px;
-  align-items: flex-start;
+  max-width: 620px;
+  margin: 80px auto;
+  padding: 40px;
 }
 
-.sidebar-card {
-  width: 220px;
-  background: white;
-  padding: 25px;
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
-}
-
-.avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 20px;
-}
-
-.sidebar-card h1 {
-  font-size: 20px;
-  margin: 0 0 8px 0;
-}
-
-.username {
-  color: #777;
-  margin-bottom: 8px;
-}
-
-.sidebar-card a {
-  display: block;
-  margin-top: 20px;
-  text-decoration: none;
-  color: #444;
-}
-
-.feed {
-  flex: 1;
+.profile-section {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 14px;
 }
 
-.post-card {
+#avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#name {
+  font-size: 42px;
+  font-weight: 600;
+  margin: 0;
+}
+
+#username {
+  font-size: 18px;
+  color: #666;
+  margin: 0;
+}
+
+#description {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+#extra-links {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#extra-links a,
+#message-link {
+  text-decoration: none;
+  color: black;
+  border-bottom: 1px solid black;
+  width: fit-content;
+}
+
+#posts {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.post-box {
+  padding: 20px;
+  border: 1px solid #ddd;
   background: white;
-  padding: 25px;
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
-}
-
-.post-image {
-  width: 100%;
-  border-radius: 4px;
-  margin-bottom: 15px;
-}
-
-.admin-panel {
-  max-width: 600px;
-  margin: 50px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 6px;
-}
-
-textarea {
-  width: 100%;
-  height: 150px;
-  margin-bottom: 20px;
-}
-
-button {
-  padding: 10px 20px;
+  border-radius: 14px;
 }
