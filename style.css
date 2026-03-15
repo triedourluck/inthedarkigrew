@@ -44,16 +44,17 @@ body {
   font-size: 0.95rem;
 }
 
-nav {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-nav a {
+.message-link {
+  display: inline-block;
+  margin-top: 20px;
   text-decoration: none;
   color: #666;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 2px;
+}
+
+.message-link:hover {
+  border-bottom: 1px solid #999;
 }
 
 .feed {
