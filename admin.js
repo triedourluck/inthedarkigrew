@@ -1,13 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getFirestore,
-doc,
-setDoc,
-collection,
-addDoc,
-getDocs,
-serverTimestamp
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  addDoc,
+  getDocs,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -22,93 +22,72 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.addEventListener("DOMContentLoaded", () => {
+const saveProfile = document.getElementById("saveProfile");
+const publishPost = document.getElementById("publishPost");
+const postsContainer = document.getElementById("adminPosts");
 
-  const saveProfile = document.getElementById("saveProfile");
-  const publishPost = document.getElementById("publishPost");
-  const postsContainer = document.getElementById("adminPosts");
+/* PROFILE */
 
-  if (!saveProfile || !publishPost || !postsContainer) {
-    console.log("elements not found");
+saveProfile.onclick = async () => {
+
+  const name = document.getElementById("nameInput").value;
+  const username = document.getElementById("usernameInput").value;
+  const description = document.getElementById("descriptionInput").value;
+  const messageLink = document.getElementById("messageLinkInput").value;
+
+  await setDoc(doc(db, "profile", "main"), {
+    name,
+    username,
+    description,
+    messageLink
+  });
+
+  alert("Saved profile ✅");
+
+};
+
+/* POST */
+
+publishPost.onclick = async () => {
+
+  const text = document.getElementById("postText").value;
+
+  if (!text) {
+    alert("write something first");
     return;
   }
 
-  saveProfile.addEventListener("click", async () => {
-
-    const name = document.getElementById("nameInput").value;
-    const username = document.getElementById("usernameInput").value;
-    const description = document.getElementById("descriptionInput").value;
-    const messageLink = document.getElementById("messageLinkInput").value;
-
-    try {
-
-      await setDoc(doc(db, "profile", "main"), {
-        name,
-        username,
-        description,
-        messageLink
-      });
-
-      alert("Saved");
-
-    } catch(error) {
-      console.error(error);
-    }
-
+  await addDoc(collection(db, "posts"), {
+    text,
+    createdAt: serverTimestamp()
   });
 
-  publishPost.addEventListener("click", async () => {
-
-    const text = document.getElementById("postText").value;
-
-    if (!text) {
-      alert("write something first");
-      return;
-    }
-
-    try {
-
-      await addDoc(collection(db, "posts"), {
-        text,
-        createdAt: serverTimestamp()
-      });
-
-      alert("Post published ✅");
-
-      loadPosts();
-
-    } catch(error) {
-      console.error(error);
-    }
-
-  });
-
-  async function loadPosts() {
-
-    try {
-
-      postsContainer.innerHTML = "";
-
-      const querySnapshot = await getDocs(collection(db, "posts"));
-
-      querySnapshot.forEach((docSnap) => {
-
-        const post = docSnap.data();
-
-        const div = document.createElement("div");
-        div.className = "admin-post";
-        div.innerHTML = `<p>${post.text}</p>`;
-
-        postsContainer.appendChild(div);
-
-      });
-
-    } catch(error) {
-      console.error(error);
-    }
-
-  }
+  alert("Post published ✅");
 
   loadPosts();
 
-});
+};
+
+/* LOAD POSTS */
+
+async function loadPosts() {
+
+  postsContainer.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "posts"));
+
+  querySnapshot.forEach((docSnap) => {
+
+    const post = docSnap.data();
+
+    const div = document.createElement("div");
+    div.className = "admin-post";
+    div.innerHTML = `<p>${post.text}</p>`;
+
+    postsContainer.appendChild(div);
+
+  });
+
+}
+
+loadPosts();
