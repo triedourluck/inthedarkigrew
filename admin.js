@@ -30,39 +30,53 @@ window.addEventListener("DOMContentLoaded", () => {
 
   saveProfile.onclick = async () => {
 
-    const name = document.getElementById("nameInput").value;
-    const username = document.getElementById("usernameInput").value;
-    const description = document.getElementById("descriptionInput").value;
-    const messageLink = document.getElementById("messageLinkInput").value;
+    try{
 
-    await setDoc(doc(db, "profile", "main"), {
-      name,
-      username,
-      description,
-      messageLink
-    });
+      const name = document.getElementById("nameInput").value;
+      const username = document.getElementById("usernameInput").value;
+      const description = document.getElementById("descriptionInput").value;
+      const messageLink = document.getElementById("messageLinkInput").value;
 
-    alert("Saved profile ✅");
+      await setDoc(doc(db, "profile", "main"), {
+        name,
+        username,
+        description,
+        messageLink
+      });
+
+      alert("Saved profile ✅");
+
+    }catch(error){
+      console.error(error);
+      alert("Firebase profile error");
+    }
 
   };
 
   publishPost.onclick = async () => {
 
-    const text = document.getElementById("postText").value;
+    try{
 
-    if(!text){
-      alert("write something first");
-      return;
+      const text = document.getElementById("postText").value;
+
+      if(!text){
+        alert("write something first");
+        return;
+      }
+
+      await addDoc(collection(db, "posts"), {
+        text,
+        createdAt: serverTimestamp()
+      });
+
+      alert("Post published ✅");
+
+      loadPosts();
+
+    }catch(error){
+      console.error(error);
+      alert("Firebase post error");
     }
-
-    await addDoc(collection(db, "posts"), {
-      text,
-      createdAt: serverTimestamp()
-    });
-
-    alert("Post published ✅");
-
-    loadPosts();
 
   };
 
@@ -70,19 +84,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
     postsContainer.innerHTML = "";
 
-    const querySnapshot = await getDocs(collection(db, "posts"));
+    try{
 
-    querySnapshot.forEach((docSnap) => {
+      const querySnapshot = await getDocs(collection(db, "posts"));
 
-      const post = docSnap.data();
+      querySnapshot.forEach((docSnap) => {
 
-      const div = document.createElement("div");
-      div.className = "admin-post";
-      div.innerHTML = `<p>${post.text}</p>`;
+        const post = docSnap.data();
 
-      postsContainer.appendChild(div);
+        const div = document.createElement("div");
+        div.className = "admin-post";
+        div.innerHTML = `<p>${post.text}</p>`;
 
-    });
+        postsContainer.appendChild(div);
+
+      });
+
+    }catch(error){
+      console.error(error);
+    }
 
   }
 
