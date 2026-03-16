@@ -9,9 +9,9 @@
 body {
   margin: 0;
   padding: 40px;
-  font-family: Arial, sans-serif;
-  background: #fff;
-  color: #111;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  color: black;
 }
 
 .container {
@@ -23,7 +23,7 @@ textarea {
   width: 100%;
   min-height: 180px;
   padding: 15px;
-  font-size: 16px;
+  font-size: 15px;
   border: 1px solid #ddd;
   resize: vertical;
   outline: none;
@@ -34,7 +34,6 @@ input[type="text"] {
   margin-top: 15px;
   padding: 12px;
   border: 1px solid #ddd;
-  font-size: 15px;
 }
 
 input[type="file"] {
@@ -44,11 +43,10 @@ input[type="file"] {
 button {
   margin-top: 20px;
   padding: 12px 24px;
-  border: none;
   background: black;
   color: white;
+  border: none;
   cursor: pointer;
-  font-size: 15px;
 }
 
 .preview {
@@ -82,40 +80,26 @@ button {
 
 <div class="preview" id="preview"></div>
 
-<button onclick="publishPost()">Publicar</button>
+<button id="publishBtn">Publicar</button>
 
 <div class="status" id="status"></div>
 
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { db, storage } from "./firebase-config.js";
+
 import {
-  getFirestore,
   collection,
   addDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 import {
-  getStorage,
   ref,
   uploadBytes,
   getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 let selectedFiles = [];
 
@@ -124,6 +108,7 @@ const preview = document.getElementById("preview");
 
 imageInput.addEventListener("change", () => {
   selectedFiles = Array.from(imageInput.files).slice(0, 9);
+
   preview.innerHTML = "";
 
   selectedFiles.forEach(file => {
@@ -133,7 +118,7 @@ imageInput.addEventListener("change", () => {
   });
 });
 
-window.publishPost = async function() {
+document.getElementById("publishBtn").addEventListener("click", async () => {
   const text = document.getElementById("postText").value.trim();
   const tag = document.getElementById("tagInput").value.trim().toLowerCase();
   const status = document.getElementById("status");
@@ -167,7 +152,7 @@ window.publishPost = async function() {
   selectedFiles = [];
 
   status.textContent = "Publicado.";
-};
+});
 </script>
 
 </body>
