@@ -326,7 +326,12 @@ async function loadSite(){
 
   const postsContainer = document.getElementById("postsContainer");
 
-  postsSnap.forEach(docItem => {
+  const params = new URLSearchParams(window.location.search);
+const targetPost = params.get("post");
+
+postsSnap.forEach(docItem => {
+
+  if(targetPost && docItem.id !== targetPost) return;
     const post = docItem.data();
 
     const div = document.createElement("div");
