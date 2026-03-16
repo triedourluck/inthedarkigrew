@@ -140,6 +140,59 @@ body{
   margin-top:10px;
 }
 
+.post-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+  position:relative;
+}
+
+.post-menu{
+  position:relative;
+}
+
+.menu-btn{
+  background:none;
+  border:none;
+  font-size:18px;
+  color:#777;
+  cursor:pointer;
+  padding:0;
+  line-height:1;
+}
+
+.menu-dropdown{
+  display:none;
+  position:absolute;
+  right:0;
+  bottom:24px;
+  background:white;
+  border:1px solid #eee;
+  min-width:90px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+  z-index:10;
+}
+
+.menu-dropdown button{
+  width:100%;
+  background:none;
+  border:none;
+  padding:8px 12px;
+  font-size:12px;
+  text-align:left;
+  cursor:pointer;
+  color:#444;
+}
+
+.menu-dropdown button:hover{
+  background:#f7f7f7;
+}
+
+.post-menu.active .menu-dropdown{
+  display:block;
+}
+
 @media(max-width:768px){
 
   .layout{
@@ -301,11 +354,43 @@ async function loadSite(){
 
     let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
 
-    div.innerHTML = `
-      ${imagesHTML}
-      <p class="post-text">${post.text || ""}</p>
-      ${tagHTML}
-    `;
+div.innerHTML = `
+  ${imagesHTML}
+  <p class="post-text">${post.text || ""}</p>
+
+  <div class="post-footer">
+    ${tagHTML}
+
+    <div class="post-menu">
+      <button class="menu-btn">⋯</button>
+      <div class="menu-dropdown">
+        <button class="share-btn">Share</button>
+      </div>
+    </div>
+  </div>
+`;
+
+const menuBtn = div.querySelector(".menu-btn");
+const postMenu = div.querySelector(".post-menu");
+const shareBtn = div.querySelector(".share-btn");
+
+menuBtn.addEventListener("click", () => {
+  postMenu.classList.toggle("active");
+});
+
+shareBtn.addEventListener("click", async () => {
+  const link = window.location.href;
+
+  if(navigator.share){
+    await navigator.share({
+      title:"The Quiet Club",
+      url:link
+    });
+  } else {
+    navigator.clipboard.writeText(link);
+    alert("Link copied");
+  }
+});
 
     postsContainer.appendChild(div);
   });
