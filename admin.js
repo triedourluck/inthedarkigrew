@@ -1,95 +1,95 @@
-import { db, storage } from "./firebase-config.js";
-import {
-  doc,
-  setDoc,
-  addDoc,
-  collection
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+const saveProfile = document.getElementById("saveProfile");
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+const nameInput = document.getElementById("nameInput");
+const usernameInput = document.getElementById("usernameInput");
+const descriptionInput = document.getElementById("descriptionInput");
+const avatarInput = document.getElementById("avatarInput");
+const messageLinkInput = document.getElementById("messageLinkInput");
 
-document.getElementById("saveProfile").addEventListener("click", async () => {
-  const name = document.getElementById("name").value;
-  const username = document.getElementById("username").value;
-  const description = document.getElementById("description").value;
+saveProfile.addEventListener("click", () => {
 
-  let avatarURL = "";
+    localStorage.setItem("name", nameInput.value);
+    localStorage.setItem("username", usernameInput.value);
+    localStorage.setItem("description", descriptionInput.value);
+    localStorage.setItem("messageLink", messageLinkInput.value);
 
-  const avatarFile = document.getElementById("avatar").files[0];
+    const file = avatarInput.files[0];
 
-  if (avatarFile) {
-    const avatarRef = ref(storage, "avatar/" + avatarFile.name);
-    await uploadBytes(avatarRef, avatarFile);
-    avatarURL = await getDownloadURL(avatarRef);
-  }
+    if(file){
+        const reader = new FileReader();
 
-  await setDoc(doc(db, "site", "profile"), {
-    name,
-    username,
-    description,
-    avatarURL
-  }, { merge: true });
+        reader.onload = function(e){
+            localStorage.setItem("avatar", e.target.result);
+        }
 
-  alert("Profile saved");
+        reader.readAsDataURL(file);
+    }
+
 });
 
-document.getElementById("saveLinks").addEventListener("click", async () => {
-  const buttonName = document.getElementById("buttonName").value;
-  const buttonLink = document.getElementById("buttonLink").value;
+const publishBtn = document.getElementById("publishPost");
+const postText = document.getElementById("postText");
+const postFile = document.getElementById("postFile");
+const adminPosts = document.getElementById("adminPosts");
 
-  await setDoc(doc(db, "site", "links"), {
-    buttonName,
-    buttonLink
-  }, { merge: true });
+let posts = [];
 
-  alert("Links saved");
+publishBtn.addEventListener("click", () => {
+
+    const text = postText.value;
+    const file = postFile.files[0];
+
+    const post = {
+        text,
+        fileURL: file ? URL.createObjectURL(file) : null,
+        fileType: file ? file.type : null
+    };
+
+    posts.unshift(post);
+
+    renderPosts();
+
+    postText.value = "";
+    postFile.value = "";
 });
 
-document.getElementById("postButton").addEventListener("click", async () => {
-  const postText = document.getElementById("postText").value;
+function renderPosts(){
 
-  let mediaURL = "";
+    adminPosts.innerHTML = "";
 
-  const file = document.getElementById("postFile").files[0];
+    posts.forEach((post,index)=>{
 
-  if (file) {
-    const postRef = ref(storage, "posts/" + file.name);
-    await uploadBytes(postRef, file);
-    mediaURL = await getDownloadURL(postRef);
-  }
+        const div = document.createElement("div");
 
-  await addDoc(collection(db, "posts"), {
-    text: postText,
-    media: mediaURL,
-    created: Date.now()
-  });
+        div.className = "admin-post";
 
-  alert("Posted");
-});
+        let media = "";
 
-document.getElementById("saveAppearance").addEventListener("click", async () => {
-  const bgColor = document.getElementById("bgColor").value;
-  const fontFamily = document.getElementById("fontFamily").value;
+        if(post.fileURL){
 
-  let bgURL = "";
+            if(post.fileType.startsWith("image")){
+                media = `<img src="${post.fileURL}">`;
+            }
 
-  const bgFile = document.getElementById("bgImage").files[0];
+            if(post.fileType.startsWith("video")){
+                media = `<video controls src="${post.fileURL}"></video>`;
+            }
 
-  if (bgFile) {
-    const bgRef = ref(storage, "background/" + bgFile.name);
-    await uploadBytes(bgRef, bgFile);
-    bgURL = await getDownloadURL(bgRef);
-  }
+        }
 
-  await setDoc(doc(db, "site", "appearance"), {
-    bgColor,
-    bgURL,
-    fontFamily
-  }, { merge: true });
+        div.innerHTML = `
+            <p>${post.text}</p>
+            ${media}
+            <button class="delete-btn" onclick="deletePost(${index})">Delete</button>
+        `;
 
-  alert("Appearance saved");
-});
+        adminPosts.appendChild(div);
+
+    });
+
+}
+
+window.deletePost = function(index){
+    posts.splice(index,1);
+    renderPosts();
+}
