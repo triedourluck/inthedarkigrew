@@ -2,11 +2,13 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin</title>
 
-<link rel="stylesheet" href="admin.css">
+<title>The Quiet Club</title>
+
+<link rel="stylesheet" href="style.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -14,57 +16,70 @@
 
 <body>
 
-<div class="admin-container">
+<div class="layout">
 
-    <h1>Admin Panel</h1>
+    <!-- PROFILE COLUMN -->
 
-    <!-- PROFILE -->
+    <div class="profile-column">
 
-    <div class="section">
+        <div class="profile-header">
 
-        <h2>Profile</h2>
+            <img id="avatar" src="">
 
-        <input id="nameInput" placeholder="Your name">
+            <div class="profile-text">
+                <h1 id="name">your name</h1>
+                <p id="username">@username</p>
+            </div>
 
-        <input id="usernameInput" placeholder="@username">
+        </div>
 
-        <textarea id="descriptionInput" placeholder="Description"></textarea>
+        <div class="bio-card">
+            <p id="description">your description here</p>
+        </div>
 
-        <input id="avatarInput" type="file">
-
-        <input id="messageLinkInput" placeholder="Leave message link">
-
-        <button id="saveProfile">Save</button>
-
-    </div>
-
-    <!-- CREATE POST -->
-
-    <div class="section">
-
-        <h2>Create Post</h2>
-
-        <textarea id="postText" placeholder="Write something..."></textarea>
-
-        <input type="file" id="postFile" multiple>
-
-        <button id="publishPost">Post</button>
+        <a class="message-button" id="messageLink" href="#" target="_blank">
+        Leave a message
+        </a>
 
     </div>
 
-    <!-- POSTS LIST -->
+    <!-- POSTS COLUMN -->
 
-    <div class="section">
-
-        <h2>Published Posts</h2>
-
-        <div id="adminPosts"></div>
+    <div class="posts-column" id="posts">
 
     </div>
 
 </div>
 
-<script type="module" src="admin.js"></script>
+<script>
+
+const savedName = localStorage.getItem("name");
+const savedUsername = localStorage.getItem("username");
+const savedDescription = localStorage.getItem("description");
+const savedAvatar = localStorage.getItem("avatar");
+const savedMessageLink = localStorage.getItem("messageLink");
+
+if(savedName){
+    document.getElementById("name").textContent = savedName;
+}
+
+if(savedUsername){
+    document.getElementById("username").textContent = savedUsername;
+}
+
+if(savedDescription){
+    document.getElementById("description").textContent = savedDescription;
+}
+
+if(savedAvatar){
+    document.getElementById("avatar").src = savedAvatar;
+}
+
+if(savedMessageLink){
+    document.getElementById("messageLink").href = savedMessageLink;
+}
+
+</script>
 
 </body>
 
