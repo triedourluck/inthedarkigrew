@@ -1,5 +1,3 @@
-alert("admin js loaded");
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -30,91 +28,61 @@ window.addEventListener("DOMContentLoaded", () => {
   const publishPost = document.getElementById("publishPost");
   const postsContainer = document.getElementById("adminPosts");
 
-  if(saveProfile){
+  saveProfile.onclick = async () => {
 
-    saveProfile.addEventListener("click", async () => {
+    const name = document.getElementById("nameInput").value;
+    const username = document.getElementById("usernameInput").value;
+    const description = document.getElementById("descriptionInput").value;
+    const messageLink = document.getElementById("messageLinkInput").value;
 
-      try{
-
-        const name = document.getElementById("nameInput").value;
-        const username = document.getElementById("usernameInput").value;
-        const description = document.getElementById("descriptionInput").value;
-        const messageLink = document.getElementById("messageLinkInput").value;
-
-        await setDoc(doc(db, "profile", "main"), {
-          name,
-          username,
-          description,
-          messageLink
-        });
-
-        alert("Saved profile ✅");
-
-      }catch(error){
-        console.error(error);
-        alert("Firebase profile error");
-      }
-
+    await setDoc(doc(db, "profile", "main"), {
+      name,
+      username,
+      description,
+      messageLink
     });
 
-  }
+    alert("Saved profile ✅");
 
-  if(publishPost){
+  };
 
-    publishPost.addEventListener("click", async () => {
+  publishPost.onclick = async () => {
 
-      try{
+    const text = document.getElementById("postText").value;
 
-        const text = document.getElementById("postText").value;
+    if(!text){
+      alert("write something first");
+      return;
+    }
 
-        if(!text){
-          alert("write something first");
-          return;
-        }
-
-        await addDoc(collection(db, "posts"), {
-          text,
-          createdAt: serverTimestamp()
-        });
-
-        alert("Post published ✅");
-
-        loadPosts();
-
-      }catch(error){
-        console.error(error);
-        alert("Firebase post error");
-      }
-
+    await addDoc(collection(db, "posts"), {
+      text,
+      createdAt: serverTimestamp()
     });
 
-  }
+    alert("Post published ✅");
+
+    loadPosts();
+
+  };
 
   async function loadPosts(){
 
-    if(!postsContainer) return;
-
     postsContainer.innerHTML = "";
 
-    try{
+    const querySnapshot = await getDocs(collection(db, "posts"));
 
-      const querySnapshot = await getDocs(collection(db, "posts"));
+    querySnapshot.forEach((docSnap) => {
 
-      querySnapshot.forEach((docSnap) => {
+      const post = docSnap.data();
 
-        const post = docSnap.data();
+      const div = document.createElement("div");
+      div.className = "admin-post";
+      div.innerHTML = `<p>${post.text}</p>`;
 
-        const div = document.createElement("div");
-        div.className = "admin-post";
-        div.innerHTML = `<p>${post.text}</p>`;
+      postsContainer.appendChild(div);
 
-        postsContainer.appendChild(div);
-
-      });
-
-    }catch(error){
-      console.error(error);
-    }
+    });
 
   }
 
