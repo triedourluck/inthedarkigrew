@@ -1,35 +1,38 @@
 import { db } from "./firebase-config.js";
+
 import {
   doc,
   getDoc,
   collection,
-  getDocs
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 async function loadSite() {
-  const profileSnap = await getDoc(doc(db, "site", "profile"));
+
+  const profileSnap = await getDoc(doc(db, "profile", "main"));
 
   if (profileSnap.exists()) {
     const data = profileSnap.data();
 
-    document.getElementById("name").textContent = data.name || "your name";
-    document.getElementById("username").textContent = data.username || "@username";
-    document.getElementById("description").textContent = data.description || "";
+    document.getElementById("profileName").textContent = data.name || "your name";
+    document.getElementById("profileUsername").textContent = data.username || "@username";
+    document.getElementById("profileDescription").textContent = data.description || "";
 
     if (data.avatarURL) {
       document.getElementById("avatar").src = data.avatarURL;
     }
 
-    if (data.buttonName && data.buttonLink) {
-      document.getElementById("extra-links").innerHTML = `
-        <a href="${data.buttonLink}" target="_blank">${data.buttonName}</a>
-      `;
+    if (data.buttonLink) {
+      document.getElementById("messageLink").href = data.buttonLink;
     }
   }
 
-  const postsSnap = await getDocs(collection(db, "posts"));
-  const postsContainer = document.getElementById("posts");
+  const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+  const postsSnap = await getDocs(postsQuery);
 
+  const postsContainer = document.getElementById("postsContainer");
   postsContainer.innerHTML = "";
 
   postsSnap.forEach(docItem => {
@@ -38,15 +41,22 @@ async function loadSite() {
     const div = document.createElement("div");
     div.className = "post-box";
 
-    let media = "";
+    let imagesHTML = "";
 
-    if (post.media) {
-      media = `<img src="${post.media}">`;
+    if (post.images && post.images.length > 0) {
+      imagesHTML = post.images.map(url => `<img src="${url}">`).join("");
+    }
+
+    let tagHTML = "";
+
+    if (post.tag) {
+      tagHTML = `<p>#${post.tag}</p>`;
     }
 
     div.innerHTML = `
       <p>${post.text || ""}</p>
-      ${media}
+      ${imagesHTML}
+      ${tagHTML}
     `;
 
     postsContainer.appendChild(div);
