@@ -154,10 +154,6 @@ body{
     box-sizing:border-box;
   }
 
-  .post-grid{
-    width:100%;
-  }
-
   .profile-text h1{
     font-size:18px;
     white-space:normal;
@@ -175,20 +171,22 @@ body{
   .message-button{
     margin-left:0;
   }
-  
-  .post-image{
-    display:block;
-    width:85% !important;
-    max-width:85% !important;
-    height:auto !important;
-    margin:0 auto !important;
-    aspect-ratio:auto !important;
-    object-fit:cover;
-  }
 
   .post-grid{
-  width:100%;
-}
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .post-image{
+    width:100%;
+    max-width:100%;
+    height:auto;
+    aspect-ratio:auto;
+    display:block;
+    object-fit:cover;
+  }
 
 }
 </style>
