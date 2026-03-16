@@ -45,7 +45,11 @@ window.onload = function(){
 
   });
 
-  publishPost.addEventListener("click", async function(){
+  publishPost.onclick = function(){
+
+  alert("button detected");
+
+};
 
     const text = document.getElementById("postText").value;
 
