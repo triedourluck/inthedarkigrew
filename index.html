@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,7 +10,6 @@
 <link rel="stylesheet" href="style.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
@@ -27,60 +25,29 @@
             <img id="avatar" src="">
 
             <div class="profile-text">
-                <h1 id="name">your name</h1>
-                <p id="username">@username</p>
+                <h1 id="profileName">your name</h1>
+                <p id="profileUsername">@username</p>
             </div>
 
         </div>
 
         <div class="bio-card">
-            <p id="description">your description here</p>
+            <p id="profileDescription">your description here</p>
         </div>
 
         <a class="message-button" id="messageLink" href="#" target="_blank">
-        Leave a message
+            Leave a message
         </a>
 
     </div>
 
     <!-- POSTS COLUMN -->
 
-    <div class="posts-column" id="posts">
-
-    </div>
+    <div class="posts-column" id="postsContainer"></div>
 
 </div>
 
-<script>
-
-const savedName = localStorage.getItem("name");
-const savedUsername = localStorage.getItem("username");
-const savedDescription = localStorage.getItem("description");
-const savedAvatar = localStorage.getItem("avatar");
-const savedMessageLink = localStorage.getItem("messageLink");
-
-if(savedName){
-    document.getElementById("name").textContent = savedName;
-}
-
-if(savedUsername){
-    document.getElementById("username").textContent = savedUsername;
-}
-
-if(savedDescription){
-    document.getElementById("description").textContent = savedDescription;
-}
-
-if(savedAvatar){
-    document.getElementById("avatar").src = savedAvatar;
-}
-
-if(savedMessageLink){
-    document.getElementById("messageLink").href = savedMessageLink;
-}
-
-</script>
+<script type="module" src="index.js"></script>
 
 </body>
-
 </html>
