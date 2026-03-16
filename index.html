@@ -24,11 +24,18 @@ body{
   padding:0 24px;
 }
 
+.bio-card{
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:14px;
+}
+
 .profile-header{
   display:flex;
   align-items:center;
-  gap:14px;
-  margin-bottom:18px;
+  gap:12px;
+  margin-bottom:12px;
 }
 
 #avatar{
@@ -42,25 +49,24 @@ body{
 .profile-text h1{
   margin:0;
   font-family:'Playfair Display', serif;
-  font-size:24px;
+  font-size:22px;
+  white-space:nowrap;
 }
 
 #profileUsername{
-  margin:4px 0 0 0;
+  margin:2px 0 0 0;
   font-size:14px;
   color:#777;
 }
 
-.bio-card{
-  background:white;
-  padding:18px;
-  border-radius:14px;
-  margin-bottom:18px;
+#profileDescription{
+  margin:0;
   line-height:1.6;
 }
 
 .message-button{
   font-size:14px;
+  font-weight:600;
   color:#333;
   text-decoration:none;
 }
@@ -110,16 +116,18 @@ body{
 
   <div class="profile-column">
 
-    <div class="profile-header">
-      <img id="avatar" src="">
-      <div class="profile-text">
-        <h1 id="profileName">your name</h1>
-        <p id="profileUsername">@username</p>
-      </div>
-    </div>
-
     <div class="bio-card">
+
+      <div class="profile-header">
+        <img id="avatar" src="">
+        <div class="profile-text">
+          <h1 id="profileName">your name</h1>
+          <p id="profileUsername">@username</p>
+        </div>
+      </div>
+
       <p id="profileDescription">your description here</p>
+
     </div>
 
     <a id="messageLink" class="message-button" href="#" target="_blank">
