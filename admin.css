@@ -1,64 +1,76 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #f3f3f3;
-  font-family: Georgia, serif;
+body{
+background:#f4f4f4;
+margin:0;
+font-family:'Inter', sans-serif;
+color:#222;
 }
 
-.admin-box {
-  width: 760px;
-  margin: 60px auto;
-  background: white;
-  border: 1px solid #e8e8e8;
-  padding: 50px;
-  box-sizing: border-box;
+.admin-container{
+max-width:700px;
+margin:80px auto;
+background:white;
+padding:40px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.06);
 }
 
-.admin-box h2 {
-  font-size: 34px;
-  font-weight: normal;
-  margin-top: 0;
-  margin-bottom: 22px;
+h1{
+font-family:'Playfair Display', serif;
+font-size:32px;
+margin-bottom:40px;
 }
 
-.admin-box section {
-  margin-bottom: 45px;
+h2{
+font-size:18px;
+margin-bottom:20px;
 }
 
-.admin-box input,
-.admin-box textarea {
-  width: 100%;
-  display: block;
-  padding: 14px;
-  margin-bottom: 14px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-  font-size: 16px;
-  font-family: inherit;
-  background: white;
+.section{
+margin-bottom:50px;
 }
 
-.admin-box textarea {
-  min-height: 140px;
-  resize: vertical;
+input,
+textarea{
+width:100%;
+padding:14px;
+margin-bottom:14px;
+border:1px solid #ddd;
+border-radius:12px;
+font-size:14px;
+font-family:'Inter', sans-serif;
+box-sizing:border-box;
 }
 
-.admin-box input[type="file"] {
-  border: none;
-  padding: 0;
-  margin-bottom: 18px;
+textarea{
+height:120px;
+resize:none;
 }
 
-.admin-box button {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid #ddd;
-  background: white;
-  font-size: 16px;
-  font-family: inherit;
-  cursor: pointer;
+button{
+padding:10px 18px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+cursor:pointer;
+font-size:14px;
 }
 
-.admin-box button:hover {
-  background: #f7f7f7;
+.admin-post{
+background:#fafafa;
+padding:16px;
+border-radius:12px;
+margin-bottom:16px;
+}
+
+.admin-post img,
+.admin-post video{
+max-width:100%;
+border-radius:10px;
+margin-top:12px;
+}
+
+.delete-btn{
+margin-top:12px;
+background:#d33;
 }
