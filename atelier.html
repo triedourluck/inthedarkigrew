@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>atelier</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #111;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+}
+
+textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 15px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  resize: vertical;
+  outline: none;
+}
+
+input[type="text"] {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+input[type="file"] {
+  margin-top: 15px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  background: black;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.preview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.preview img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.status {
+  margin-top: 20px;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<textarea id="postText" placeholder="Escribe aquí..."></textarea>
+
+<input type="text" id="tagInput" placeholder="tag (ej: fashion)">
+
+<input type="file" id="imageInput" multiple accept="image/*">
+
+<div class="preview" id="preview"></div>
+
+<button onclick="publishPost()">Publicar</button>
+
+<div class="status" id="status"></div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_STORAGE_BUCKET",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+let selectedFiles = [];
+
+const imageInput = document.getElementById("imageInput");
+const preview = document.getElementById("preview");
+
+imageInput.addEventListener("change", () => {
+  selectedFiles = Array.from(imageInput.files).slice(0, 9);
+  preview.innerHTML = "";
+
+  selectedFiles.forEach(file => {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
+});
+
+window.publishPost = async function() {
+  const text = document.getElementById("postText").value.trim();
+  const tag = document.getElementById("tagInput").value.trim().toLowerCase();
+  const status = document.getElementById("status");
+
+  if (!text) {
+    status.textContent = "Escribe algo primero.";
+    return;
+  }
+
+  status.textContent = "Subiendo...";
+
+  let imageUrls = [];
+
+  for (let file of selectedFiles) {
+    const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    imageUrls.push(url);
+  }
+
+  await addDoc(collection(db, "posts"), {
+    text,
+    tag,
+    images: imageUrls,
+    createdAt: serverTimestamp()
+  });
+
+  document.getElementById("postText").value = "";
+  document.getElementById("tagInput").value = "";
+  preview.innerHTML = "";
+  selectedFiles = [];
+
+  status.textContent = "Publicado.";
+};
+</script>
+
+</body>
+</html>
