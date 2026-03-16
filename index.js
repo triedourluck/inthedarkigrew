@@ -33,6 +33,9 @@ async function loadSite() {
   const postsSnap = await getDocs(postsQuery);
 
   const postsContainer = document.getElementById("postsContainer");
+
+  if (!postsContainer) return;
+
   postsContainer.innerHTML = "";
 
   postsSnap.forEach(docItem => {
@@ -63,4 +66,6 @@ async function loadSite() {
   });
 }
 
-loadSite();
+document.addEventListener("DOMContentLoaded", () => {
+  loadSite();
+});
