@@ -82,6 +82,16 @@ button {
   margin-top: 15px;
   font-size: 14px;
 }
+
+.post-item {
+  border: 1px solid #ddd;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.post-item button {
+  margin-top: 10px;
+}
 </style>
 </head>
 <body>
@@ -117,6 +127,11 @@ button {
 <div class="status" id="status"></div>
 </section>
 
+<section>
+<h2>Posts publicados</h2>
+<div id="postsList"></div>
+</section>
+
 </div>
 
 <script type="module">
@@ -128,6 +143,8 @@ import {
   getDoc,
   collection,
   addDoc,
+  getDocs,
+  deleteDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -237,13 +254,40 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
     preview.innerHTML = "";
     selectedFiles = [];
 
+    loadPosts();
+
   } catch (error) {
     console.error(error);
     document.getElementById("status").textContent = "Error al publicar";
   }
 });
 
+async function loadPosts() {
+  const postsList = document.getElementById("postsList");
+  postsList.innerHTML = "";
+
+  const snap = await getDocs(collection(db, "posts"));
+
+  snap.forEach(docItem => {
+    const div = document.createElement("div");
+    div.className = "post-item";
+
+    div.innerHTML = `
+      <p>${docItem.data().text || "(sin texto)"}</p>
+      <button data-id="${docItem.id}">Eliminar</button>
+    `;
+
+    div.querySelector("button").addEventListener("click", async () => {
+      await deleteDoc(doc(db, "posts", docItem.id));
+      loadPosts();
+    });
+
+    postsList.appendChild(div);
+  });
+}
+
 loadProfile();
+loadPosts();
 </script>
 
 </body>
