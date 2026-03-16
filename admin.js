@@ -22,65 +22,69 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const saveProfile = document.getElementById("saveProfile");
-const publishPost = document.getElementById("publishPost");
-const postsContainer = document.getElementById("adminPosts");
+window.addEventListener("DOMContentLoaded", () => {
 
-saveProfile.addEventListener("click", async () => {
+  const saveProfile = document.getElementById("saveProfile");
+  const publishPost = document.getElementById("publishPost");
+  const postsContainer = document.getElementById("adminPosts");
 
-  const name = document.getElementById("nameInput").value;
-  const username = document.getElementById("usernameInput").value;
-  const description = document.getElementById("descriptionInput").value;
-  const messageLink = document.getElementById("messageLinkInput").value;
+  saveProfile.addEventListener("click", async () => {
 
-  await setDoc(doc(db, "profile", "main"), {
-    name,
-    username,
-    description,
-    messageLink
+    const name = document.getElementById("nameInput").value;
+    const username = document.getElementById("usernameInput").value;
+    const description = document.getElementById("descriptionInput").value;
+    const messageLink = document.getElementById("messageLinkInput").value;
+
+    await setDoc(doc(db, "profile", "main"), {
+      name,
+      username,
+      description,
+      messageLink
+    });
+
+    alert("Saved");
+
   });
 
-  alert("Saved");
+  publishPost.addEventListener("click", async () => {
 
-});
+    const text = document.getElementById("postText").value;
 
-publishPost.addEventListener("click", async () => {
+    if (!text) {
+      alert("write something first");
+      return;
+    }
 
-  const text = document.getElementById("postText").value;
+    await addDoc(collection(db, "posts"), {
+      text,
+      createdAt: serverTimestamp()
+    });
 
-  if (!text) {
-    alert("write something first");
-    return;
+    alert("Post published ✅");
+
+    loadPosts();
+
+  });
+
+  async function loadPosts() {
+
+    postsContainer.innerHTML = "";
+
+    const querySnapshot = await getDocs(collection(db, "posts"));
+
+    querySnapshot.forEach((docSnap) => {
+
+      const post = docSnap.data();
+
+      const div = document.createElement("div");
+      div.innerHTML = `<p>${post.text}</p>`;
+
+      postsContainer.appendChild(div);
+
+    });
+
   }
-
-  await addDoc(collection(db, "posts"), {
-    text,
-    createdAt: serverTimestamp()
-  });
-
-  alert("Post published");
 
   loadPosts();
 
 });
-
-async function loadPosts() {
-
-  postsContainer.innerHTML = "";
-
-  const querySnapshot = await getDocs(collection(db, "posts"));
-
-  querySnapshot.forEach((docSnap) => {
-
-    const post = docSnap.data();
-
-    const div = document.createElement("div");
-    div.innerHTML = `<p>${post.text}</p>`;
-
-    postsContainer.appendChild(div);
-
-  });
-
-}
-
-loadPosts();
