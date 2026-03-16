@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Quiet Club</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:#f6f6f4;
+  font-family:'Inter', sans-serif;
+  color:#222;
+}
+
+.layout{
+  max-width:960px;
+  margin:80px auto;
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:60px;
+  padding:0 24px;
+}
+
+.profile-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+}
+
+#avatar{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+}
+
+.profile-text h1{
+  margin:0;
+  font-family:'Playfair Display', serif;
+  font-size:24px;
+}
+
+#profileUsername{
+  margin:4px 0 0 0;
+  font-size:14px;
+  color:#777;
+}
+
+.bio-card{
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  margin-bottom:18px;
+  line-height:1.6;
+}
+
+.message-button{
+  font-size:14px;
+  color:#333;
+  text-decoration:none;
+}
+
+.posts-column{
+  display:flex;
+  flex-direction:column;
+  gap:50px;
+}
+
+.post-box{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.post-image{
+  width:100%;
+  display:block;
+}
+
+.post-text{
+  font-family:'Playfair Display', serif;
+  font-size:18px;
+  line-height:1.8;
+  margin:0;
+}
+
+.post-tag{
+  font-size:13px;
+  color:#777;
+}
+
+@media(max-width:768px){
+  .layout{
+    grid-template-columns:1fr;
+    gap:50px;
+    margin:40px auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <div class="profile-column">
+
+    <div class="profile-header">
+      <img id="avatar" src="">
+      <div class="profile-text">
+        <h1 id="profileName">your name</h1>
+        <p id="profileUsername">@username</p>
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <p id="profileDescription">your description here</p>
+    </div>
+
+    <a id="messageLink" class="message-button" href="#" target="_blank">
+      Leave a message
+    </a>
+
+  </div>
+
+  <div class="posts-column" id="postsContainer"></div>
+
+</div>
+
+<script type="module">
+import { db } from "./firebase-config.js";
+
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+async function loadSite(){
+
+  const profileSnap = await getDoc(doc(db,"profile","main"));
+
+  if(profileSnap.exists()){
+    const data = profileSnap.data();
+
+    document.getElementById("profileName").textContent = data.name || "your name";
+    document.getElementById("profileUsername").textContent = data.username || "@username";
+    document.getElementById("profileDescription").textContent = data.description || "";
+
+    if(data.avatarURL){
+      document.getElementById("avatar").src = data.avatarURL;
+    }
+
+    if(data.buttonLink){
+      document.getElementById("messageLink").href = data.buttonLink;
+    }
+  }
+
+  const postsQuery = query(collection(db,"posts"), orderBy("createdAt","desc"));
+  const postsSnap = await getDocs(postsQuery);
+
+  const postsContainer = document.getElementById("postsContainer");
+
+  postsSnap.forEach(docItem => {
+    const post = docItem.data();
+
+    const div = document.createElement("div");
+    div.className = "post-box";
+
+    let imagesHTML = "";
+
+    if(post.images && post.images.length > 0){
+      imagesHTML = post.images.map(url =>
+        `<img src="${url}" class="post-image">`
+      ).join("");
+    }
+
+    let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
+
+    div.innerHTML = `
+      ${imagesHTML}
+      <p class="post-text">${post.text || ""}</p>
+      ${tagHTML}
+    `;
+
+    postsContainer.appendChild(div);
+  });
+}
+
+loadSite();
+</script>
+
+</body>
+</html>
