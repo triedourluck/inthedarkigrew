@@ -79,18 +79,13 @@ flex-direction:column;
 gap:40px;
 }
 
-/* POST CARD */
+/* POST CARD (para cuando los agreguemos después) */
 
 .post-card{
 background:white;
 border-radius:16px;
 overflow:hidden;
 box-shadow:0 6px 18px rgba(0,0,0,0.05);
-transition:transform 0.2s ease;
-}
-
-.post-card:hover{
-transform:translateY(-2px);
 }
 
 .post-card img{
@@ -98,11 +93,8 @@ width:100%;
 display:block;
 }
 
-/* TEXT POST */
-
-.text-post{
-padding:28px;
-font-size:16px;
+.post-content{
+padding:24px;
 line-height:1.7;
 font-family:'Playfair Display', serif;
 }
