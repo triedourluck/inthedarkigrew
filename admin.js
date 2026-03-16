@@ -2,7 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getFirestore,
   doc,
-  setDoc
+  setDoc,
+  collection,
+  addDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -19,6 +22,8 @@ const db = getFirestore(app);
 
 window.addEventListener("DOMContentLoaded", () => {
 
+  // PROFILE
+
   const saveProfile = document.getElementById("saveProfile");
 
   saveProfile.addEventListener("click", async () => {
@@ -28,23 +33,35 @@ window.addEventListener("DOMContentLoaded", () => {
     const description = document.getElementById("descriptionInput").value;
     const messageLink = document.getElementById("messageLinkInput").value;
 
-    try {
+    await setDoc(doc(db, "profile", "main"), {
+      name,
+      username,
+      description,
+      messageLink
+    });
 
-      await setDoc(doc(db, "profile", "main"), {
-        name,
-        username,
-        description,
-        messageLink
-      });
+    alert("Profile saved ✅");
 
-      alert("Saved to Firebase ✅");
+  });
 
-    } catch (error) {
+  // POSTS
 
-      console.error(error);
-      alert("Error saving ❌");
+  const publishPost = document.getElementById("publishPost");
 
-    }
+  publishPost.addEventListener("click", async () => {
+
+    const text = document.getElementById("postText").value;
+
+    if (!text) return;
+
+    await addDoc(collection(db, "posts"), {
+      text,
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById("postText").value = "";
+
+    alert("Post published ✅");
 
   });
 
