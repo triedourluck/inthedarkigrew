@@ -37,12 +37,16 @@ let posts = [];
 publishBtn.addEventListener("click", () => {
 
     const text = postText.value;
-    const file = postFile.files[0];
+    const files = Array.from(postFile.files);
+
+    const media = files.map(file => ({
+        url: URL.createObjectURL(file),
+        type: file.type
+    }));
 
     const post = {
         text,
-        fileURL: file ? URL.createObjectURL(file) : null,
-        fileType: file ? file.type : null
+        media
     };
 
     posts.unshift(post);
@@ -60,26 +64,32 @@ function renderPosts(){
     posts.forEach((post,index)=>{
 
         const div = document.createElement("div");
-
         div.className = "admin-post";
 
-        let media = "";
+        let mediaHTML = "";
 
-        if(post.fileURL){
+        if(post.media.length > 0){
 
-            if(post.fileType.startsWith("image")){
-                media = `<img src="${post.fileURL}">`;
-            }
+            mediaHTML = `<div class="media-grid">`;
 
-            if(post.fileType.startsWith("video")){
-                media = `<video controls src="${post.fileURL}"></video>`;
-            }
+            post.media.forEach(item => {
 
+                if(item.type.startsWith("image")){
+                    mediaHTML += `<img src="${item.url}">`;
+                }
+
+                if(item.type.startsWith("video")){
+                    mediaHTML += `<video controls src="${item.url}"></video>`;
+                }
+
+            });
+
+            mediaHTML += `</div>`;
         }
 
         div.innerHTML = `
             <p>${post.text}</p>
-            ${media}
+            ${mediaHTML}
             <button class="delete-btn" onclick="deletePost(${index})">Delete</button>
         `;
 
