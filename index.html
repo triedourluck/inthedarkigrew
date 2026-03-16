@@ -272,14 +272,22 @@ async function loadSite(){
     let imagesHTML = "";
 
     if(post.images && post.images.length > 0){
-      imagesHTML = `
-  <div class="post-grid">
-    ${post.images.map(url =>
-      `<img src="${url}" class="post-image">`
-    ).join("")}
-  </div>
-`;
-    }
+
+  if(post.images.length === 1){
+    imagesHTML = `
+      <img src="${post.images[0]}" class="post-image single-image">
+    `;
+  } else {
+    imagesHTML = `
+      <div class="post-grid">
+        ${post.images.map(url =>
+          `<img src="${url}" class="post-image">`
+        ).join("")}
+      </div>
+    `;
+  }
+
+}
 
     let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
 
