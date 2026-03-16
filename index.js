@@ -33,7 +33,6 @@ async function loadSite() {
   const postsSnap = await getDocs(postsQuery);
 
   const postsContainer = document.getElementById("postsContainer");
-
   postsContainer.innerHTML = "";
 
   postsSnap.forEach(docItem => {
