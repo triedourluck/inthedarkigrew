@@ -381,15 +381,10 @@ menuBtn.addEventListener("click", () => {
 shareBtn.addEventListener("click", async () => {
   const link = window.location.href;
 
-  if(navigator.share){
-    await navigator.share({
-      title:"The Quiet Club",
-      url:link
-    });
-  } else {
-    navigator.clipboard.writeText(link);
-    alert("Link copied");
-  }
+  await navigator.clipboard.writeText(link);
+  alert("Link copied");
+
+  postMenu.classList.remove("active");
 });
 
     postsContainer.appendChild(div);
