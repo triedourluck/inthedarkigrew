@@ -17,31 +17,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const saveProfile = document.getElementById("saveProfile");
+window.addEventListener("DOMContentLoaded", () => {
 
-saveProfile.addEventListener("click", async () => {
+  const saveProfile = document.getElementById("saveProfile");
 
-  const name = document.getElementById("nameInput").value;
-  const username = document.getElementById("usernameInput").value;
-  const description = document.getElementById("descriptionInput").value;
-  const messageLink = document.getElementById("messageLinkInput").value;
+  saveProfile.addEventListener("click", async () => {
 
-  try {
+    const name = document.getElementById("nameInput").value;
+    const username = document.getElementById("usernameInput").value;
+    const description = document.getElementById("descriptionInput").value;
+    const messageLink = document.getElementById("messageLinkInput").value;
 
-    await setDoc(doc(db, "profile", "main"), {
-      name,
-      username,
-      description,
-      messageLink
-    });
+    try {
 
-    alert("Saved to Firebase ✅");
+      await setDoc(doc(db, "profile", "main"), {
+        name,
+        username,
+        description,
+        messageLink
+      });
 
-  } catch (error) {
+      alert("Saved to Firebase ✅");
 
-    console.error(error);
-    alert("Error saving ❌");
+    } catch (error) {
 
-  }
+      console.error(error);
+      alert("Error saving ❌");
+
+    }
+
+  });
 
 });
