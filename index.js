@@ -34,8 +34,6 @@ async function loadSite() {
 
   const postsContainer = document.getElementById("postsContainer");
 
-  if (!postsContainer) return;
-
   postsContainer.innerHTML = "";
 
   postsSnap.forEach(docItem => {
@@ -47,18 +45,16 @@ async function loadSite() {
     let imagesHTML = "";
 
     if (post.images && post.images.length > 0) {
-      imagesHTML = post.images.map(url => `<img src="${url}">`).join("");
+      imagesHTML = post.images.map(url =>
+        `<img src="${url}" class="post-image">`
+      ).join("");
     }
 
-    let tagHTML = "";
-
-    if (post.tag) {
-      tagHTML = `<p>#${post.tag}</p>`;
-    }
+    let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
 
     div.innerHTML = `
-      <p>${post.text || ""}</p>
       ${imagesHTML}
+      <p class="post-text">${post.text || ""}</p>
       ${tagHTML}
     `;
 
@@ -66,6 +62,4 @@ async function loadSite() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadSite();
-});
+document.addEventListener("DOMContentLoaded", loadSite);
