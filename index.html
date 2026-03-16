@@ -215,9 +215,13 @@ async function loadSite(){
     let imagesHTML = "";
 
     if(post.images && post.images.length > 0){
-      imagesHTML = post.images.map(url =>
-        `<img src="${url}" class="post-image">`
-      ).join("");
+      imagesHTML = `
+  <div class="post-grid">
+    ${post.images.map(url =>
+      `<img src="${url}" class="post-image">`
+    ).join("")}
+  </div>
+`;
     }
 
     let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
