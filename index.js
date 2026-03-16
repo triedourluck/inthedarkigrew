@@ -1,74 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+import { db } from "./firebase-config.js";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-<head>
+async function loadSite() {
+  const profileSnap = await getDoc(doc(db, "site", "profile"));
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  if (profileSnap.exists()) {
+    const data = profileSnap.data();
 
-<title>The Quiet Club</title>
+    document.getElementById("name").textContent = data.name || "your name";
+    document.getElementById("username").textContent = data.username || "@username";
+    document.getElementById("description").textContent = data.description || "";
 
-<link rel="stylesheet" href="style.css">
+    if (data.avatarURL) {
+      document.getElementById("avatar").src = data.avatarURL;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    if (data.buttonName && data.buttonLink) {
+      document.getElementById("extra-links").innerHTML = `
+        <a href="${data.buttonLink}" target="_blank">${data.buttonName}</a>
+      `;
+    }
+  }
 
-</head>
+  const postsSnap = await getDocs(collection(db, "posts"));
+  const postsContainer = document.getElementById("posts");
 
-<body>
+  postsContainer.innerHTML = "";
 
-<div class="layout">
+  postsSnap.forEach(docItem => {
+    const post = docItem.data();
 
-    <!-- PROFILE COLUMN -->
+    const div = document.createElement("div");
+    div.className = "post-box";
 
-    <div class="profile-column">
+    let media = "";
 
-        <div class="profile-header">
+    if (post.media) {
+      media = `<img src="${post.media}">`;
+    }
 
-            <img id="avatar" src="">
+    div.innerHTML = `
+      <p>${post.text || ""}</p>
+      ${media}
+    `;
 
-            <div class="profile-text">
-                <h1 id="name">your name</h1>
-                <p id="username">@username</p>
-            </div>
+    postsContainer.appendChild(div);
+  });
+}
 
-        </div>
-
-        <div class="bio-card">
-            <p id="description">your description here</p>
-        </div>
-
-        <a class="message-button" href="https://secreto.site/" target="_blank">
-        Leave a message
-        </a>
-
-    </div>
-
-
-    <!-- POSTS COLUMN -->
-
-    <div class="posts-column" id="posts">
-
-        <!-- IMAGE POST -->
-
-        <div class="post-card">
-            <img src="https://picsum.photos/600/400">
-        </div>
-
-
-        <!-- TEXT POST -->
-
-        <div class="post-card text-post">
-
-            <p>
-            Sometimes the smallest things take up the most room in your heart.
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-</body>
-
-</html>
+loadSite();
