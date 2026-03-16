@@ -2,10 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getFirestore,
   doc,
-  setDoc,
+  getDoc,
   collection,
-  addDoc,
-  serverTimestamp
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -20,49 +19,50 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.addEventListener("DOMContentLoaded", () => {
+async function loadProfile() {
 
-  // PROFILE
+  const profileRef = doc(db, "profile", "main");
+  const profileSnap = await getDoc(profileRef);
 
-  const saveProfile = document.getElementById("saveProfile");
+  if (profileSnap.exists()) {
 
-  saveProfile.addEventListener("click", async () => {
+    const data = profileSnap.data();
 
-    const name = document.getElementById("nameInput").value;
-    const username = document.getElementById("usernameInput").value;
-    const description = document.getElementById("descriptionInput").value;
-    const messageLink = document.getElementById("messageLinkInput").value;
+    document.getElementById("profileName").textContent = data.name || "your name";
+    document.getElementById("profileUsername").textContent = data.username || "@username";
+    document.getElementById("profileDescription").textContent = data.description || "your description here";
 
-    await setDoc(doc(db, "profile", "main"), {
-      name,
-      username,
-      description,
-      messageLink
-    });
+    if (data.messageLink) {
+      document.getElementById("messageLink").href = data.messageLink;
+    }
 
-    alert("Profile saved ✅");
+  }
 
-  });
+}
 
-  // POSTS
+async function loadPosts() {
 
-  const publishPost = document.getElementById("publishPost");
+  const postsContainer = document.getElementById("postsContainer");
+  postsContainer.innerHTML = "";
 
-  publishPost.addEventListener("click", async () => {
+  const querySnapshot = await getDocs(collection(db, "posts"));
 
-    const text = document.getElementById("postText").value;
+  querySnapshot.forEach((docItem) => {
 
-    if (!text) return;
+    const data = docItem.data();
 
-    await addDoc(collection(db, "posts"), {
-      text,
-      createdAt: serverTimestamp()
-    });
+    const post = document.createElement("div");
+    post.className = "post-card";
 
-    document.getElementById("postText").value = "";
+    post.innerHTML = `
+      <p>${data.text}</p>
+    `;
 
-    alert("Post published ✅");
+    postsContainer.appendChild(post);
 
   });
 
-});
+}
+
+loadProfile();
+loadPosts();
