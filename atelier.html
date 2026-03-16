@@ -19,29 +19,28 @@ body {
   margin: auto;
 }
 
-textarea {
-  width: 100%;
-  min-height: 180px;
-  padding: 15px;
-  font-size: 15px;
-  border: 1px solid #ddd;
-  resize: vertical;
-  outline: none;
+section {
+  margin-bottom: 50px;
 }
 
-input[type="text"] {
+textarea,
+input[type="text"],
+input[type="file"] {
   width: 100%;
-  margin-top: 15px;
+  margin-top: 12px;
   padding: 12px;
   border: 1px solid #ddd;
+  font-size: 15px;
+  box-sizing: border-box;
 }
 
-input[type="file"] {
-  margin-top: 15px;
+textarea {
+  min-height: 180px;
+  resize: vertical;
 }
 
 button {
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 12px 24px;
   background: black;
   color: white;
@@ -53,7 +52,7 @@ button {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .preview img {
@@ -63,7 +62,7 @@ button {
 }
 
 .status {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 14px;
 }
 </style>
@@ -72,9 +71,23 @@ button {
 
 <div class="container">
 
-<textarea id="postText" placeholder="Escribe aquí..."></textarea>
+<section>
+<h2>Configuración visual</h2>
 
-<input type="text" id="tagInput" placeholder="tag (ej: fashion)">
+<input type="text" id="name" placeholder="your name">
+<input type="text" id="username" placeholder="@username">
+<input type="text" id="description" placeholder="description">
+<input type="text" id="buttonLink" placeholder="leave a message link">
+<input type="file" id="avatarInput" accept="image/*">
+
+<button id="saveProfile">Guardar perfil</button>
+</section>
+
+<section>
+<h2>Nuevo post</h2>
+
+<textarea id="postText" placeholder="Escribe aquí..."></textarea>
+<input type="text" id="tagInput" placeholder="tag">
 
 <input type="file" id="imageInput" multiple accept="image/*">
 
@@ -83,6 +96,7 @@ button {
 <button id="publishBtn">Publicar</button>
 
 <div class="status" id="status"></div>
+</section>
 
 </div>
 
@@ -90,6 +104,8 @@ button {
 import { db, storage } from "./firebase-config.js";
 
 import {
+  doc,
+  setDoc,
   collection,
   addDoc,
   serverTimestamp
@@ -102,6 +118,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 let selectedFiles = [];
+let avatarFile = null;
 
 const imageInput = document.getElementById("imageInput");
 const preview = document.getElementById("preview");
@@ -118,40 +135,69 @@ imageInput.addEventListener("change", () => {
   });
 });
 
+document.getElementById("avatarInput").addEventListener("change", e => {
+  avatarFile = e.target.files[0];
+});
+
+document.getElementById("saveProfile").addEventListener("click", async () => {
+  try {
+    let avatarURL = "";
+
+    if (avatarFile) {
+      const avatarRef = ref(storage, `avatar/${Date.now()}_${avatarFile.name}`);
+      await uploadBytes(avatarRef, avatarFile);
+      avatarURL = await getDownloadURL(avatarRef);
+    }
+
+    await setDoc(doc(db, "profile", "main"), {
+      name: document.getElementById("name").value,
+      username: document.getElementById("username").value,
+      description: document.getElementById("description").value,
+      buttonLink: document.getElementById("buttonLink").value,
+      buttonName: "Leave a message",
+      avatarURL
+    });
+
+    alert("Perfil guardado");
+  } catch (error) {
+    console.error(error);
+    alert("Error guardando perfil");
+  }
+});
+
 document.getElementById("publishBtn").addEventListener("click", async () => {
-  const text = document.getElementById("postText").value.trim();
-  const tag = document.getElementById("tagInput").value.trim().toLowerCase();
-  const status = document.getElementById("status");
+  try {
+    const text = document.getElementById("postText").value.trim();
+    const tag = document.getElementById("tagInput").value.trim().toLowerCase();
+    const status = document.getElementById("status");
 
-  if (!text) {
-    status.textContent = "Escribe algo primero.";
-    return;
+    let imageUrls = [];
+
+    for (let file of selectedFiles) {
+      const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      imageUrls.push(url);
+    }
+
+    await addDoc(collection(db, "posts"), {
+      text,
+      tag,
+      images: imageUrls,
+      createdAt: serverTimestamp()
+    });
+
+    status.textContent = "Publicado.";
+
+    document.getElementById("postText").value = "";
+    document.getElementById("tagInput").value = "";
+    preview.innerHTML = "";
+    selectedFiles = [];
+
+  } catch (error) {
+    console.error(error);
+    document.getElementById("status").textContent = "Error al publicar";
   }
-
-  status.textContent = "Subiendo...";
-
-  let imageUrls = [];
-
-  for (let file of selectedFiles) {
-    const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    imageUrls.push(url);
-  }
-
-  await addDoc(collection(db, "posts"), {
-    text,
-    tag,
-    images: imageUrls,
-    createdAt: serverTimestamp()
-  });
-
-  document.getElementById("postText").value = "";
-  document.getElementById("tagInput").value = "";
-  preview.innerHTML = "";
-  selectedFiles = [];
-
-  status.textContent = "Publicado.";
 });
 </script>
 
