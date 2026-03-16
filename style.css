@@ -5,6 +5,8 @@ font-family:'Inter', sans-serif;
 color:#222;
 }
 
+/* MAIN LAYOUT */
+
 .layout{
 max-width:1100px;
 margin:100px auto;
@@ -47,7 +49,7 @@ font-size:14px;
 color:#777;
 }
 
-/* BIO */
+/* BIO CARD */
 
 .bio-card{
 background:white;
@@ -58,7 +60,7 @@ margin-bottom:24px;
 line-height:1.6;
 }
 
-/* MESSAGE */
+/* MESSAGE BUTTON */
 
 .message-button{
 display:inline-block;
@@ -69,7 +71,7 @@ text-decoration:none;
 cursor:pointer;
 }
 
-/* POSTS */
+/* POSTS COLUMN */
 
 .posts-column{
 display:flex;
@@ -77,23 +79,47 @@ flex-direction:column;
 gap:40px;
 }
 
+/* POST CARD */
+
+.post-card{
+background:white;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 6px 18px rgba(0,0,0,0.05);
+transition:transform 0.2s ease;
+}
+
+.post-card:hover{
+transform:translateY(-2px);
+}
+
+.post-card img{
+width:100%;
+display:block;
+}
+
+/* TEXT POST */
+
+.text-post{
+padding:28px;
+font-size:16px;
+line-height:1.7;
+font-family:'Playfair Display', serif;
+}
+
 /* MOBILE */
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
 .layout{
 grid-template-columns:1fr;
-gap:50px;
+gap:60px;
 margin:40px auto;
 padding:20px;
 }
 
 .profile-column{
 width:100%;
-}
-
-.bio-card{
-width:auto;
 }
 
 .posts-column{
