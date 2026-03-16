@@ -379,7 +379,7 @@ menuBtn.addEventListener("click", () => {
 });
 
 shareBtn.addEventListener("click", async () => {
-  const link = window.location.href;
+  const link = `${window.location.origin}${window.location.pathname}?post=${docItem.id}`;
 
   await navigator.clipboard.writeText(link);
   alert("Link copied");
