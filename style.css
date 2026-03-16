@@ -43,7 +43,7 @@ font-family:'Playfair Display', serif;
 font-size:24px;
 }
 
-#username{
+#profileUsername{
 margin:4px 0 0 0;
 font-size:14px;
 color:#777;
@@ -79,24 +79,30 @@ flex-direction:column;
 gap:40px;
 }
 
-/* POST CARD (para cuando los agreguemos después) */
+/* POSTS */
 
-.post-card{
+.post-box{
 background:white;
 border-radius:16px;
 overflow:hidden;
 box-shadow:0 6px 18px rgba(0,0,0,0.05);
 }
 
-.post-card img{
+.post-image{
 width:100%;
 display:block;
 }
 
-.post-content{
+.post-text{
 padding:24px;
 line-height:1.7;
 font-family:'Playfair Display', serif;
+}
+
+.post-tag{
+padding:0 24px 24px;
+font-size:14px;
+color:#777;
 }
 
 /* MOBILE */
