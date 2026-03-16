@@ -1,10 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  getDocs
+getFirestore,
+doc,
+setDoc,
+collection,
+addDoc,
+getDocs,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -19,50 +22,65 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function loadProfile() {
+const saveProfile = document.getElementById("saveProfile");
+const publishPost = document.getElementById("publishPost");
+const postsContainer = document.getElementById("adminPosts");
 
-  const profileRef = doc(db, "profile", "main");
-  const profileSnap = await getDoc(profileRef);
+saveProfile.addEventListener("click", async () => {
 
-  if (profileSnap.exists()) {
+  const name = document.getElementById("nameInput").value;
+  const username = document.getElementById("usernameInput").value;
+  const description = document.getElementById("descriptionInput").value;
+  const messageLink = document.getElementById("messageLinkInput").value;
 
-    const data = profileSnap.data();
+  await setDoc(doc(db, "profile", "main"), {
+    name,
+    username,
+    description,
+    messageLink
+  });
 
-    document.getElementById("profileName").textContent = data.name || "your name";
-    document.getElementById("profileUsername").textContent = data.username || "@username";
-    document.getElementById("profileDescription").textContent = data.description || "your description here";
+  alert("Saved");
 
-    if (data.messageLink) {
-      document.getElementById("messageLink").href = data.messageLink;
-    }
+});
 
+publishPost.addEventListener("click", async () => {
+
+  const text = document.getElementById("postText").value;
+
+  if (!text) {
+    alert("write something first");
+    return;
   }
 
-}
+  await addDoc(collection(db, "posts"), {
+    text,
+    createdAt: serverTimestamp()
+  });
+
+  alert("Post published");
+
+  loadPosts();
+
+});
 
 async function loadPosts() {
 
-  const postsContainer = document.getElementById("postsContainer");
   postsContainer.innerHTML = "";
 
   const querySnapshot = await getDocs(collection(db, "posts"));
 
-  querySnapshot.forEach((docItem) => {
+  querySnapshot.forEach((docSnap) => {
 
-    const data = docItem.data();
+    const post = docSnap.data();
 
-    const post = document.createElement("div");
-    post.className = "post-card";
+    const div = document.createElement("div");
+    div.innerHTML = `<p>${post.text}</p>`;
 
-    post.innerHTML = `
-      <p>${data.text}</p>
-    `;
-
-    postsContainer.appendChild(post);
+    postsContainer.appendChild(div);
 
   });
 
 }
 
-loadProfile();
 loadPosts();
