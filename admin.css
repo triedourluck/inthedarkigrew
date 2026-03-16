@@ -5,8 +5,6 @@ font-family:'Inter', sans-serif;
 color:#222;
 }
 
-/* MAIN */
-
 .admin-container{
 max-width:900px;
 margin:80px auto;
@@ -16,19 +14,13 @@ gap:80px;
 padding:0 30px;
 }
 
-/* SECTIONS */
-
-.section{
-position:relative;
-z-index:1;
-}
-
 .section:first-child{
 background:white;
 padding:24px;
 border-radius:16px;
 box-shadow:0 6px 18px rgba(0,0,0,0.05);
 height:fit-content;
+position:relative;
 }
 
 .section:nth-child(2),
@@ -38,9 +30,8 @@ padding:24px;
 border-radius:16px;
 box-shadow:0 6px 18px rgba(0,0,0,0.05);
 margin-bottom:28px;
+position:relative;
 }
-
-/* TITLE */
 
 h1{
 grid-column:1 / -1;
@@ -55,8 +46,6 @@ font-weight:500;
 margin-bottom:18px;
 }
 
-/* INPUTS */
-
 input,
 textarea{
 width:100%;
@@ -68,14 +57,14 @@ font-size:14px;
 font-family:'Inter', sans-serif;
 box-sizing:border-box;
 background:#fafafa;
+position:relative;
+z-index:1;
 }
 
 textarea{
 height:120px;
 resize:none;
 }
-
-/* BUTTON */
 
 button{
 padding:10px 16px;
@@ -90,8 +79,6 @@ z-index:10;
 pointer-events:auto;
 }
 
-/* POSTS */
-
 .admin-post{
 background:#fafafa;
 padding:18px;
@@ -103,8 +90,6 @@ margin-bottom:18px;
 margin:0;
 line-height:1.7;
 }
-
-/* GRID MEDIA */
 
 .media-grid{
 display:grid;
@@ -121,14 +106,10 @@ display:block;
 object-fit:cover;
 }
 
-/* DELETE */
-
 .delete-btn{
 margin-top:14px;
 background:#d33;
 }
-
-/* MOBILE */
 
 @media(max-width:768px){
 
