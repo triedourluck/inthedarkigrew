@@ -1,49 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin</title>
+
 <link rel="stylesheet" href="admin.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
 
-<div class="admin-box">
+<div class="admin-container">
 
-<section>
-<h2>Profile</h2>
-<input id="name" placeholder="Name">
-<input id="username" placeholder="Username">
-<textarea id="description" placeholder="Description"></textarea>
-<input type="file" id="avatar">
-<button id="saveProfile">Save</button>
-</section>
+    <h1>Admin Panel</h1>
 
-<section>
-<h2>Links</h2>
-<input id="buttonName" placeholder="Button name">
-<input id="buttonLink" placeholder="Button link">
-<button id="saveLinks">Save</button>
-</section>
+    <!-- PROFILE SETTINGS -->
 
-<section>
-<h2>Create Post</h2>
-<textarea id="postText" placeholder="Write something..."></textarea>
-<input type="file" id="postFile">
-<button id="postButton">Post</button>
-</section>
+    <div class="section">
 
-<section>
-<h2>Appearance</h2>
-<input id="bgColor" placeholder="Background color">
-<input type="file" id="bgImage">
-<input id="fontFamily" placeholder="Font family">
-<button id="saveAppearance">Save</button>
-</section>
+        <h2>Profile</h2>
+
+        <input id="nameInput" placeholder="Your name">
+
+        <input id="usernameInput" placeholder="@username">
+
+        <textarea id="descriptionInput" placeholder="Description"></textarea>
+
+        <input id="avatarInput" type="file">
+
+        <input id="messageLinkInput" placeholder="Leave message link">
+
+        <button id="saveProfile">Save</button>
+
+    </div>
+
+    <!-- POSTS -->
+
+    <div class="section">
+
+        <h2>Create Post</h2>
+
+        <textarea id="postText" placeholder="Write something..."></textarea>
+
+        <input type="file" id="postFile">
+
+        <button id="publishPost">Post</button>
+
+    </div>
+
+    <!-- POSTS LIST -->
+
+    <div class="section">
+
+        <h2>Published Posts</h2>
+
+        <div id="adminPosts"></div>
+
+    </div>
 
 </div>
 
 <script type="module" src="admin.js"></script>
 
 </body>
+
 </html>
