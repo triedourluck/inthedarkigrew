@@ -28,6 +28,11 @@ window.addEventListener("DOMContentLoaded", () => {
   const publishPost = document.getElementById("publishPost");
   const postsContainer = document.getElementById("adminPosts");
 
+  if (!saveProfile || !publishPost || !postsContainer) {
+    console.log("elements not found");
+    return;
+  }
+
   saveProfile.addEventListener("click", async () => {
 
     const name = document.getElementById("nameInput").value;
@@ -35,14 +40,20 @@ window.addEventListener("DOMContentLoaded", () => {
     const description = document.getElementById("descriptionInput").value;
     const messageLink = document.getElementById("messageLinkInput").value;
 
-    await setDoc(doc(db, "profile", "main"), {
-      name,
-      username,
-      description,
-      messageLink
-    });
+    try {
 
-    alert("Saved");
+      await setDoc(doc(db, "profile", "main"), {
+        name,
+        username,
+        description,
+        messageLink
+      });
+
+      alert("Saved");
+
+    } catch(error) {
+      console.error(error);
+    }
 
   });
 
@@ -55,33 +66,46 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    await addDoc(collection(db, "posts"), {
-      text,
-      createdAt: serverTimestamp()
-    });
+    try {
 
-    alert("Post published ✅");
+      await addDoc(collection(db, "posts"), {
+        text,
+        createdAt: serverTimestamp()
+      });
 
-    loadPosts();
+      alert("Post published ✅");
+
+      loadPosts();
+
+    } catch(error) {
+      console.error(error);
+    }
 
   });
 
   async function loadPosts() {
 
-    postsContainer.innerHTML = "";
+    try {
 
-    const querySnapshot = await getDocs(collection(db, "posts"));
+      postsContainer.innerHTML = "";
 
-    querySnapshot.forEach((docSnap) => {
+      const querySnapshot = await getDocs(collection(db, "posts"));
 
-      const post = docSnap.data();
+      querySnapshot.forEach((docSnap) => {
 
-      const div = document.createElement("div");
-      div.innerHTML = `<p>${post.text}</p>`;
+        const post = docSnap.data();
 
-      postsContainer.appendChild(div);
+        const div = document.createElement("div");
+        div.className = "admin-post";
+        div.innerHTML = `<p>${post.text}</p>`;
 
-    });
+        postsContainer.appendChild(div);
+
+      });
+
+    } catch(error) {
+      console.error(error);
+    }
 
   }
 
