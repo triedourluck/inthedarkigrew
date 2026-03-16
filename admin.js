@@ -1,9 +1,8 @@
-alert("admin js loaded");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getFirestore,
-doc,
-setDoc
+  getFirestore,
+  doc,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -22,27 +21,27 @@ const saveProfile = document.getElementById("saveProfile");
 
 saveProfile.addEventListener("click", async () => {
 
-    const name = document.getElementById("nameInput").value;
-    const username = document.getElementById("usernameInput").value;
-    const description = document.getElementById("descriptionInput").value;
-    const messageLink = document.getElementById("messageLinkInput").value;
+  const name = document.getElementById("nameInput").value;
+  const username = document.getElementById("usernameInput").value;
+  const description = document.getElementById("descriptionInput").value;
+  const messageLink = document.getElementById("messageLinkInput").value;
 
-    try {
+  try {
 
-        await setDoc(doc(db, "profile", "main"), {
-            name,
-            username,
-            description,
-            messageLink
-        });
+    await setDoc(doc(db, "profile", "main"), {
+      name,
+      username,
+      description,
+      messageLink
+    });
 
-        alert("Saved to Firebase");
+    alert("Saved to Firebase ✅");
 
-    } catch(error) {
+  } catch (error) {
 
-        console.error(error);
-        alert("Error saving");
+    console.error(error);
+    alert("Error saving ❌");
 
-    }
+  }
 
 });
