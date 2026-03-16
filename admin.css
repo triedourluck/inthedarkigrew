@@ -5,39 +5,30 @@ font-family:'Inter', sans-serif;
 color:#222;
 }
 
-.admin-container{
+.admin-wrapper{
 max-width:900px;
 margin:80px auto;
-display:grid;
-grid-template-columns:280px 1fr;
-gap:80px;
 padding:0 30px;
 }
 
-.section:first-child{
-background:white;
-padding:24px;
-border-radius:16px;
-box-shadow:0 6px 18px rgba(0,0,0,0.05);
-height:fit-content;
-position:relative;
+.admin-grid{
+display:grid;
+grid-template-columns:280px 1fr;
+gap:60px;
 }
 
-.section:nth-child(2),
-.section:nth-child(3){
+.card{
 background:white;
 padding:24px;
 border-radius:16px;
 box-shadow:0 6px 18px rgba(0,0,0,0.05);
 margin-bottom:28px;
-position:relative;
 }
 
 h1{
-grid-column:1 / -1;
 font-family:'Playfair Display', serif;
 font-size:32px;
-margin:0 0 10px 0;
+margin-bottom:30px;
 }
 
 h2{
@@ -57,8 +48,6 @@ font-size:14px;
 font-family:'Inter', sans-serif;
 box-sizing:border-box;
 background:#fafafa;
-position:relative;
-z-index:1;
 }
 
 textarea{
@@ -67,16 +56,13 @@ resize:none;
 }
 
 button{
-padding:10px 16px;
+padding:12px 18px;
 border:none;
 border-radius:10px;
 background:#222;
 color:white;
 cursor:pointer;
 font-size:14px;
-position:relative;
-z-index:10;
-pointer-events:auto;
 }
 
 .admin-post{
@@ -86,37 +72,8 @@ border-radius:14px;
 margin-bottom:18px;
 }
 
-.admin-post p{
-margin:0;
-line-height:1.7;
-}
-
-.media-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;
-margin-top:14px;
-}
-
-.media-grid img,
-.media-grid video{
-width:100%;
-border-radius:10px;
-display:block;
-object-fit:cover;
-}
-
-.delete-btn{
-margin-top:14px;
-background:#d33;
-}
-
 @media(max-width:768px){
-
-.admin-container{
+.admin-grid{
 grid-template-columns:1fr;
-gap:30px;
-padding:20px;
 }
-
 }
