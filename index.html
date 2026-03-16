@@ -127,10 +127,12 @@ body{
 }
 
 @media(max-width:768px){
+
   .layout{
     grid-template-columns:1fr;
-    gap:50px;
-    margin:40px auto;
+    gap:32px;
+    margin:32px auto;
+    padding:0 16px;
   }
 
   .profile-column{
@@ -141,6 +143,39 @@ body{
   .description-card{
     width:100%;
   }
+
+  .posts-column{
+    width:100%;
+  }
+
+  .post-box{
+    width:100%;
+    padding:16px;
+    box-sizing:border-box;
+  }
+
+  .post-grid{
+    width:100%;
+  }
+
+  .profile-text h1{
+    font-size:18px;
+    white-space:normal;
+  }
+
+  #profileUsername{
+    font-size:13px;
+  }
+
+  #profileDescription{
+    font-size:13px;
+    line-height:1.35;
+  }
+
+  .message-button{
+    margin-left:0;
+  }
+
 }
 </style>
 </head>
