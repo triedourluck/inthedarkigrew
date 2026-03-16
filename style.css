@@ -14,12 +14,6 @@ gap:120px;
 padding:0 30px;
 }
 
-/* PROFILE */
-
-.profile-column{
-position:relative;
-}
-
 .profile-header{
 display:flex;
 align-items:center;
@@ -39,7 +33,6 @@ object-fit:cover;
 margin:0;
 font-family:'Playfair Display', serif;
 font-size:24px;
-font-weight:600;
 }
 
 #profileUsername{
@@ -58,15 +51,10 @@ border:1px solid rgba(0,0,0,0.04);
 }
 
 .message-button{
-display:inline-block;
-margin-left:8px;
 font-size:14px;
 color:#333;
 text-decoration:none;
-cursor:pointer;
 }
-
-/* POSTS */
 
 .posts-column{
 display:flex;
@@ -78,13 +66,12 @@ max-width:560px;
 .post-box{
 display:flex;
 flex-direction:column;
-gap:24px;
+gap:20px;
 }
 
 .post-image{
 width:100%;
 display:block;
-border-radius:2px;
 }
 
 .post-text{
@@ -97,10 +84,7 @@ margin:0;
 .post-tag{
 font-size:13px;
 color:#777;
-margin-top:-10px;
 }
-
-/* MOBILE */
 
 @media (max-width:768px){
 
@@ -113,15 +97,6 @@ padding:20px;
 
 .posts-column{
 max-width:100%;
-}
-
-#avatar{
-width:58px;
-height:58px;
-}
-
-.profile-text h1{
-font-size:22px;
 }
 
 }
