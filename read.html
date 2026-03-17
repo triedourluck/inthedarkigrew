@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>The Quiet Club</title>
-
+  
   <meta property="og:title" content="The Quiet Club">
   <meta property="og:description" content="A note from The Quiet Club">
   <meta property="og:image" content="https://thequietclub.site/default.jpg">
   <meta property="og:type" content="article">
-
   <meta name="twitter:card" content="summary_large_image">
-
+  <meta property="twitter:title" content="The Quiet Club">
+  <meta property="twitter:description" content="A note from The Quiet Club">
+  <meta property="twitter:image" content="https://thequietclub.site/default.jpg">
+  
   <script>
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
     setTimeout(() => {
       window.location.href = `/post.html?id=${id}`;
-    }, 1200);
+    }, 4000);
   </script>
 </head>
-
 <body>
 </body>
 </html>
+:::
