@@ -128,7 +128,14 @@ box-sizing:border-box;
 <textarea id="postText" placeholder="Escribe aquí..."></textarea>
 <input type="text" id="tagInput" placeholder="tag">
 
-<input type="file" id="imageInput" multiple accept="image/*">
+<div style="display:flex; align-items:center; gap:12px; margin-top:12px;">
+  <input type="file" id="imageInput" multiple accept="image/*" style="flex:1;">
+
+  <label style="font-size:13px; display:flex; align-items:center; gap:6px;">
+    <input type="checkbox" id="showImages" checked>
+    mostrar en perfil
+  </label>
+</div>
 
 <div class="preview" id="preview"></div>
 
@@ -252,18 +259,20 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
     }
 
     await addDoc(collection(db, "posts"), {
-      title,
-      text,
-      tag,
-      images: imageUrls,
-      createdAt: serverTimestamp()
-    });
+  title,
+  text,
+  tag,
+  images: imageUrls,
+  showImages: document.getElementById("showImages").checked,
+  createdAt: serverTimestamp()
+});
 
     status.textContent = "Publicado.";
 
     document.getElementById("postTitle").value = "";
     document.getElementById("postText").value = "";
     document.getElementById("tagInput").value = "";
+    document.getElementById("showImages").checked = true;
     preview.innerHTML = "";
     selectedFiles = [];
 
