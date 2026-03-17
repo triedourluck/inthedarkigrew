@@ -18,11 +18,10 @@ exports.handler = async function(event) {
 
     let image = `${siteUrl}/default.jpg`;
 
-if (
-  fields.images?.arrayValue?.values?.length > 0 &&
-  fields.images.arrayValue.values[0].stringValue
-) {
-  image = decodeURIComponent(fields.images.arrayValue.values[0].stringValue);
+const imageValues = fields.images?.arrayValue?.values;
+
+if (Array.isArray(imageValues) && imageValues.length > 0) {
+  image = imageValues[0].stringValue || `${siteUrl}/default.jpg`;
 }
 
     return {
