@@ -1,41 +1,34 @@
 export default async function handler(req, res) {
-  const { id } = req.query;
+  const id = req.query.id;
 
-  const firebaseUrl = `https://firestore.googleapis.com/v1/projects/thequietclub-7265a/databases/(default)/documents/posts/${id}`;
+  const url = `https://firestore.googleapis.com/v1/projects/thequietclub-7265a/databases/(default)/documents/posts/${id}`;
 
-  const response = await fetch(firebaseUrl);
+  const response = await fetch(url);
   const data = await response.json();
 
-  const fields = data.fields || {};
+  if (!data.fields) {
+    return res.redirect("https://quietclub-preview.vercel.app");
+  }
 
-  const text = fields.text?.stringValue || "A note from The Quiet Club";
-  const tag = fields.tag?.stringValue || "";
+  const text = data.fields.text?.stringValue || "";
   const image =
-    fields.images?.arrayValue?.values?.[0]?.stringValue ||
-    "https://thequietclub.site/default.jpg";
+    data.fields.images?.arrayValue?.values?.[0]?.stringValue ||
+    "https://quietclub-preview.vercel.app/default.jpg";
 
   res.setHeader("Content-Type", "text/html");
 
   res.send(`
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-
-<meta property="og:title" content="The Quiet Club">
-<meta property="og:description" content="${text.substring(0, 140)}">
-<meta property="og:image" content="${image}">
-<meta property="og:type" content="article">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Quiet Club">
-<meta name="twitter:description" content="${text.substring(0, 140)}">
-<meta name="twitter:image" content="${image}">
-
-<meta http-equiv="refresh" content="0; url=https://quietclub-preview.vercel.app/post.html?id=${id}">
-
-</head>
-<body></body>
-</html>
-`);
+    <html>
+      <head>
+        <meta property="og:title" content="The Quiet Club" />
+        <meta property="og:description" content="${text.slice(0, 140)}" />
+        <meta property="og:image" content="${image}" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://quietclub-preview.vercel.app/post.html?id=${id}" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta http-equiv="refresh" content="0; url=https://quietclub-preview.vercel.app/post.html?id=${id}" />
+      </head>
+      <body></body>
+    </html>
+  `);
 }
