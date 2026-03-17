@@ -228,9 +228,9 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
       avatarURL = await getDownloadURL(avatarRef);
     }
 
-    await setDoc(doc(db, "profile", "main"), {
+    await setDoc(doc(db, "users", currentUser.uid), {
       name: document.getElementById("name").value,
-      username: document.getElementById("username").value,
+      alias: document.getElementById("username").value,
       description: document.getElementById("description").value,
       buttonLink: document.getElementById("buttonLink").value,
       buttonName: "Leave a message",
@@ -315,8 +315,13 @@ async function loadPosts() {
   });
 }
 
-loadProfile();
-loadPosts();
+onAuthStateChanged(auth, user => {
+  if(user){
+    currentUser = user;
+    loadProfile();
+    loadPosts();
+  }
+});
 </script>
 
 </body>
