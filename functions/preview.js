@@ -1,12 +1,32 @@
+const admin = require("firebase-admin");
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+    })
+  });
+}
+
+const db = admin.firestore();
+
 exports.handler = async (event) => {
   const id = event.queryStringParameters.id || "";
+
+  const doc = await db.collection("posts").doc(id).get();
+  const post = doc.exists ? doc.data() : {};
+
+  const image = post.image || "https://thequietclub.site/default.jpg";
 
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "text/html"
     },
-    body: `<!DOCTYPE html>
+    body: `
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -19,12 +39,13 @@ exports.handler = async (event) => {
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Quiet Club">
 <meta name="twitter:description" content="A note from The Quiet Club">
-<meta name="twitter:image" content="https://thequietclub.site/default.jpg">
+<meta name="twitter:image" content="${image}">
 
 <meta http-equiv="refresh" content="2;url=https://thequietclub.site/post.html?id=${id}">
 </head>
 <body>
 </body>
-</html>`
+</html>
+`
   };
 };
