@@ -200,13 +200,13 @@ document.getElementById("avatarInput").addEventListener("change", e => {
 });
 
 async function loadProfile() {
-  const profileSnap = await getDoc(doc(db, "profile", "main"));
+  const profileSnap = await getDoc(doc(db, "users", currentUser.uid));
 
   if (profileSnap.exists()) {
     const data = profileSnap.data();
 
     document.getElementById("name").value = data.name || "";
-    document.getElementById("username").value = data.username || "";
+    document.getElementById("username").value = data.alias || "";
     document.getElementById("description").value = data.description || "";
     document.getElementById("buttonLink").value = data.buttonLink || "";
 
