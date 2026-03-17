@@ -111,6 +111,21 @@ body{
   margin:0 auto 14px auto;
 }
 
+.post-title{
+  font-family:'Playfair Display', serif;
+  font-size:18px;
+  line-height:1.25;
+  margin:0 0 10px 0;
+  font-weight:400;
+}
+
+.post-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
 .post-text{
   font-size:13px;
   line-height:1.45;
@@ -226,11 +241,18 @@ async function loadPost(){
       }
     }
 
-    div.innerHTML = `
-      ${imagesHTML}
-      <p class="post-text">${post.text || ""}</p>
-      <p class="post-tag">#${post.tag || ""}</p>
-    `;
+    let titleHTML = post.title ? `<p class="post-title">${post.title}</p>` : "";
+    let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
+
+div.innerHTML = `
+  ${imagesHTML}
+  ${titleHTML}
+  <p class="post-text">${post.text || ""}</p>
+
+  <div class="post-footer">
+    ${tagHTML}
+  </div>
+`;
 
     document.getElementById("postContainer").appendChild(div);
   }
