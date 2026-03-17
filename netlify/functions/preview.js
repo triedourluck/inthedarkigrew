@@ -1,34 +1,53 @@
 exports.handler = async function(event) {
   const id = event.queryStringParameters.id;
-
   const siteUrl = "https://spontaneous-khapse-f57661.netlify.app";
 
-  const title = "The Quiet Club";
-  const description = "Escribo por si algún día necesito recordar quién fui.";
-  const image = `${siteUrl}/default.jpg`;
+  const firestoreUrl = `https://firestore.googleapis.com/v1/projects/thequietclub/databases/(default)/documents/posts/${id}`;
 
-  return {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "text/html"
-    },
-    body: `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <title>${title}</title>
+  try {
+    const response = await fetch(firestoreUrl);
+    const data = await response.json();
 
-        <meta property="og:title" content="${title}">
-        <meta property="og:description" content="${description}">
-        <meta property="og:image" content="${image}">
-        <meta property="og:type" content="article">
-        <meta property="og:url" content="${siteUrl}/post.html?id=${id}">
+    const fields = data.fields || {};
 
-        <meta http-equiv="refresh" content="0; url=${siteUrl}/post.html?id=${id}">
-      </head>
-      <body></body>
-      </html>
-    `
-  };
+    const title = fields.title?.stringValue
+      ? `${fields.title.stringValue} | The Quiet Club`
+      : "The Quiet Club";
+
+    const text = fields.text?.stringValue || "Escribo por si algún día necesito recordar quién fui.";
+
+    const image = fields.images?.arrayValue?.values?.[0]?.stringValue
+      || `${siteUrl}/default.jpg`;
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "text/html"
+      },
+      body: `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <title>${title}</title>
+
+          <meta property="og:title" content="${title}">
+          <meta property="og:description" content="${text.substring(0, 160)}">
+          <meta property="og:image" content="${image}">
+          <meta property="og:type" content="article">
+          <meta property="og:url" content="${siteUrl}/post.html?id=${id}">
+
+          <meta http-equiv="refresh" content="0; url=${siteUrl}/post.html?id=${id}">
+        </head>
+        <body></body>
+        </html>
+      `
+    };
+
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: "Error loading preview"
+    };
+  }
 };
