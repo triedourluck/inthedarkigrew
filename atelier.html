@@ -252,7 +252,7 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
     }
 
     await addDoc(collection(db, "posts"), {
-      title
+      title,
       text,
       tag,
       images: imageUrls,
