@@ -15,8 +15,8 @@ const db = admin.firestore();
 exports.handler = async (event) => {
   const id = event.queryStringParameters.id || "";
 
-  const snapshot = await db.collection("posts").limit(1).get();
-  const post = snapshot.empty ? {} : snapshot.docs[0].data();
+  const doc = await db.collection("posts").doc(id).get();
+  const post = doc.exists ? doc.data() : {};
 
   const image = post.images?.[0] ? encodeURI(post.images[0]) : "";
 
