@@ -26,7 +26,6 @@ exports.handler = async (event) => {
       "Content-Type": "text/html"
     },
     body: `
-    
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,7 +45,6 @@ exports.handler = async (event) => {
 </head>
 <body>
 </body>
-</html>
-`
+</html>`
   };
 };
