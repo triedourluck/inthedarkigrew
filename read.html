@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Quiet Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+body{
+  margin:0;
+  background:#f6f6f4;
+  font-family:'Inter', sans-serif;
+  color:#222;
+}
+
+.layout{
+  max-width:900px;
+  margin:80px auto;
+  display:grid;
+  grid-template-columns:270px 520px;
+  gap:50px;
+  padding:0 24px;
+}
+
+.profile-column{
+  width:270px;
+}
+
+.profile-card,
+.description-card{
+  width:270px;
+  background:white;
+  padding:18px;
+  margin-bottom:12px;
+  box-sizing:border-box;
+}
+
+.profile-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+#avatar{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+}
+
+.profile-text h1{
+  margin:0;
+  font-family:'Playfair Display', serif;
+  font-size:20px;
+  line-height:1.05;
+}
+
+#profileUsername{
+  margin:2px 0 0 0;
+  font-size:14px;
+  color:#666;
+}
+
+#profileDescription{
+  margin:0;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.message-button{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-weight:600;
+  color:#666;
+  text-decoration:none;
+}
+
+.posts-column{
+  width:520px;
+}
+
+.post-box{
+  background:white;
+  padding:22px;
+  box-sizing:border-box;
+}
+
+.post-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  width:96%;
+  margin:0 auto 14px auto;
+}
+
+.post-image{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  display:block;
+}
+
+.single-image{
+  width:85%;
+  display:block;
+  margin:0 auto 14px auto;
+}
+
+.post-title{
+  font-family:'Playfair Display', serif;
+  font-size:18px;
+  line-height:1.25;
+  margin:0 0 10px 0;
+  font-weight:400;
+}
+
+.post-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
+.post-text{
+  font-size:13px;
+  line-height:1.45;
+  white-space:pre-line;
+}
+
+.post-tag{
+  font-size:12px;
+  color:#777;
+  margin-top:10px;
+}
+
+@media(max-width:768px){
+  .layout{
+    grid-template-columns:1fr;
+    gap:32px;
+    margin:32px auto;
+    padding:0 16px;
+  }
+
+  .profile-column,
+  .posts-column{
+    width:100%;
+  }
+
+  .profile-card,
+  .description-card,
+  .post-box{
+    width:100%;
+  }
+
+  .post-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <div class="profile-column">
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <img id="avatar">
+        <div class="profile-text">
+          <h1 id="profileName"></h1>
+          <p id="profileUsername"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="description-card">
+      <p id="profileDescription"></p>
+    </div>
+
+    <a id="messageLink" class="message-button" href="#" target="_blank">
+      Leave a message ✉️
+    </a>
+
+  </div>
+
+  <div class="posts-column" id="postContainer"></div>
+
+</div>
+
+<script type="module">
+import { db } from "./firebase-config.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+async function loadPost(){
+
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id");
+
+  const profileSnap = await getDoc(doc(db,"profile","main"));
+
+  if(profileSnap.exists()){
+    const data = profileSnap.data();
+
+    document.getElementById("profileName").textContent = data.name || "";
+    document.getElementById("profileUsername").textContent = data.username || "";
+    document.getElementById("profileDescription").textContent = data.description || "";
+    document.getElementById("avatar").src = data.avatarURL || "";
+
+    if(data.buttonLink){
+      document.getElementById("messageLink").href = data.buttonLink;
+    }
+  }
+
+  const postSnap = await getDoc(doc(db,"posts",postId));
+
+  if(postSnap.exists()){
+
+    const post = postSnap.data();
+    const div = document.createElement("div");
+    div.className = "post-box";
+
+    let imagesHTML = "";
+
+    if(post.images && post.images.length > 0){
+
+      if(post.images.length === 1){
+        imagesHTML = `<img src="${post.images[0]}" class="post-image single-image">`;
+      } else {
+        imagesHTML = `
+          <div class="post-grid">
+            ${post.images.map(url => `<img src="${url}" class="post-image">`).join("")}
+          </div>
+        `;
+      }
+    }
+
+    let titleHTML = post.title ? `<p class="post-title">${post.title}</p>` : "";
+    let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
+
+div.innerHTML = `
+  ${imagesHTML}
+  ${titleHTML}
+  <p class="post-text">${post.text || ""}</p>
+
+  <div class="post-footer">
+    ${tagHTML}
+  </div>
+`;
+
+    document.getElementById("postContainer").appendChild(div);
+  }
+}
+
+loadPost();
+</script>
+
+</body>
+</html>
