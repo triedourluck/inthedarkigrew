@@ -13,7 +13,7 @@ exports.handler = async (event) => {
 
 <meta property="og:title" content="The Quiet Club">
 <meta property="og:description" content="A note from The Quiet Club">
-<meta property="og:image" content="https://thequietclub.site/default.jpg">
+<meta property="og:image" content="${image}">
 <meta property="og:type" content="article">
 
 <meta name="twitter:card" content="summary_large_image">
