@@ -213,7 +213,7 @@ async function loadPost(){
 
   const params = new URLSearchParams(window.location.search);
   const postId = params.get("id");
-  document.title = postId;
+  document.title = "The Quiet Club";
 
   const profileSnap = await getDoc(doc(db,"profile","main"));
 
