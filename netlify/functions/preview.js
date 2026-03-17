@@ -47,7 +47,7 @@ if (Array.isArray(imageValues) && imageValues.length > 0) {
           <meta name="twitter:description" content="${text.substring(0,160)}">
           <meta name="twitter:image" content="${image}">
 
-          <meta http-equiv="refresh" content="0; url=${siteUrl}/post.html?id=${id}">
+          <meta http-equiv="refresh" content="0; url=${siteUrl}/read.html?id=${id}">
         </head>
         <body></body>
         </html>
