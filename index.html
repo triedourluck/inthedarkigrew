@@ -394,7 +394,7 @@ menuBtn.addEventListener("click", () => {
 });
 
 shareBtn.addEventListener("click", async () => {
-  const link = `${window.location.origin}/.netlify/functions/preview?id=${docItem.id}`;
+  const link = `https://spontaneous-khapse-f57661.netlify.app/.netlify/functions/preview?id=${docItem.id}`;
 
   await navigator.clipboard.writeText(link);
   alert("Link copied");
