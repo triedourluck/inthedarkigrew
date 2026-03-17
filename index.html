@@ -126,6 +126,14 @@ body{
   object-fit:cover;
 }
 
+.post-title{
+  font-family:'Playfair Display', serif;
+  font-size:18px;
+  line-height:1.25;
+  margin:0 0 10px 0;
+  font-weight:400;
+}
+
 .post-text{
   font-family:'Inter', sans-serif;
   font-size:13px;
@@ -356,21 +364,19 @@ postsSnap.forEach(docItem => {
   }
 
 }
-
+    let titleHTML = post.title ? `<p class="post-title">${post.title}</p>` : "";
     let tagHTML = post.tag ? `<p class="post-tag">#${post.tag}</p>` : "";
 
 div.innerHTML = `
   ${imagesHTML}
+  ${titleHTML}
   <p class="post-text">${post.text || ""}</p>
+  ${tagHTML}
 
-  <div class="post-footer">
-    ${tagHTML}
-
-    <div class="post-menu">
-      <button class="menu-btn">⋯</button>
-      <div class="menu-dropdown">
-        <button class="share-btn">Share</button>
-      </div>
+  <div class="post-menu">
+    <button class="menu-btn">⋯</button>
+    <div class="menu-dropdown">
+      <button class="share-btn">Share</button>
     </div>
   </div>
 `;
