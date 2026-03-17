@@ -18,7 +18,7 @@ exports.handler = async (event) => {
   const doc = await db.collection("posts").doc(id).get();
   const post = doc.exists ? doc.data() : {};
 
-  const image = encodeURI(post.images?.[0]);
+  const image = post.images?.[0] ? encodeURI(post.images[0]) : "";
 
   return {
     statusCode: 200,
