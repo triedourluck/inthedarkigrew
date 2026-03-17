@@ -18,7 +18,9 @@ exports.handler = async (event) => {
   const doc = await db.collection("posts").doc(id).get();
   const post = doc.exists ? doc.data() : {};
 
-  const image = post.image || "https://thequietclub.site/default.jpg";
+  const image = typeof post.images?.[0] === "string"
+  ? post.images[0]
+  : post.images?.[0]?.url;
 
   return {
     statusCode: 200,
@@ -26,6 +28,7 @@ exports.handler = async (event) => {
       "Content-Type": "text/html"
     },
     body: `
+    
 <!DOCTYPE html>
 <html>
 <head>
