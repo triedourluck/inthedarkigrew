@@ -1,1 +1,1 @@
-/post /.netlify/functions/preview 200
+/p/* /.netlify/functions/preview?id=:splat 200
