@@ -1,5 +1,5 @@
 exports.handler = async (event) => {
-  const id = event.path.split("/").pop();
+  const id = event.queryStringParameters.id || "";
 
   return {
     statusCode: 200,
