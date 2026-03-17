@@ -347,7 +347,7 @@ postsSnap.forEach(docItem => {
 
     let imagesHTML = "";
 
-    if(post.images && post.images.length > 0){
+    if(post.showImages !== false && post.images && post.images.length > 0){
 
   if(post.images.length === 1){
     imagesHTML = `
@@ -394,7 +394,7 @@ menuBtn.addEventListener("click", () => {
 });
 
 shareBtn.addEventListener("click", async () => {
-  const link = `${window.location.origin}/post.html?id=${docItem.id}`;
+  const link = `${window.location.origin}/.netlify/functions/preview?id=${docItem.id}`;
 
   await navigator.clipboard.writeText(link);
   alert("Link copied");
