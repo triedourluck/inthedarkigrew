@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign up — The Quiet Club</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:#f6f6f4;
+  font-family:'Inter', sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.container{
+  width:320px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border:none;
+  background:white;
+  font-size:13px;
+  box-sizing:border-box;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  background:white;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.title{
+  font-family:'Playfair Display', serif;
+  text-align:center;
+  margin-bottom:24px;
+  font-size:24px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="title">Sign up</div>
+
+  <input id="name" placeholder="Name">
+  <input id="alias" placeholder="Username">
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <button id="signupBtn">Create account</button>
+
+</div>
+
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import {
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+document.getElementById("signupBtn").addEventListener("click", async () => {
+
+  const name = document.getElementById("name").value;
+  const alias = document.getElementById("alias").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+  await setDoc(doc(db,"users",userCredential.user.uid),{
+    name,
+    alias,
+    email
+  });
+
+  window.location.href = "atelier.html";
+});
+</script>
+
+</body>
+</html>
