@@ -47,6 +47,24 @@ button{
   margin-bottom:24px;
   font-size:24px;
 }
+
+.password-wrapper{
+  position:relative;
+  margin-bottom:12px;
+}
+
+.password-wrapper input{
+  margin-bottom:0;
+}
+
+#togglePassword{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:14px;
+}
 </style>
 </head>
 
@@ -59,7 +77,10 @@ button{
   <input id="name" placeholder="Name">
   <input id="alias" placeholder="Username (without @)">
   <input id="email" placeholder="Email">
+  <div class="password-wrapper">
   <input id="password" type="password" placeholder="Password">
+  <span id="togglePassword">👁️</span>
+</div>
 
   <button id="signupBtn">Create account</button>
 
@@ -73,15 +94,26 @@ import {
 
 import {
   doc,
-  setDoc
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 document.getElementById("signupBtn").addEventListener("click", async () => {
 
   const name = document.getElementById("name").value;
-  const alias = document.getElementById("alias").value;
+  const alias = document.getElementById("alias").value.trim().toLowerCase();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const q = query(collection(db,"users"), where("alias","==",alias));
+const aliasCheck = await getDocs(q);
+
+if(!alias || aliasCheck.size > 0){
+  alert("Username already exists");
+  return;
+}
 
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -92,6 +124,17 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
   });
 
   window.location.href = "atelier.html";
+});
+
+const togglePassword = document.getElementById("togglePassword");
+const password = document.getElementById("password");
+
+togglePassword.addEventListener("click", () => {
+  if(password.type === "password"){
+    password.type = "text";
+  } else {
+    password.type = "password";
+  }
 });
 </script>
 
