@@ -37,6 +37,11 @@ exports.handler = async function(event) {
           <meta property="og:type" content="article">
           <meta property="og:url" content="${siteUrl}/post.html?id=${id}">
 
+          <meta name="twitter:card" content="summary_large_image">
+          <meta name="twitter:title" content="${title}">
+          <meta name="twitter:description" content="${text.substring(0,160)}">
+          <meta name="twitter:image" content="${image}">
+
           <meta http-equiv="refresh" content="0; url=${siteUrl}/post.html?id=${id}">
         </head>
         <body></body>
