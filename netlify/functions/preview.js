@@ -21,7 +21,7 @@ exports.handler = async function(event) {
 const imageValues = fields.images?.arrayValue?.values;
 
 if (Array.isArray(imageValues) && imageValues.length > 0) {
-  image = imageValues[0].stringValue || `${siteUrl}/default.jpg`;
+  image = imageValues[0].stringValue.split("&")[0];
 }
 
     return {
