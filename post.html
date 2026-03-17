@@ -62,11 +62,12 @@ body{
   background:#ddd;
 }
 
-.profile-text h1{
+.profile-title{
   margin:0;
   font-family:'Playfair Display', serif;
   font-size:20px;
   line-height:1.05;
+  white-space:nowrap;
 }
 
 #profileUsername{
@@ -172,6 +173,12 @@ body{
   .post-grid{
     grid-template-columns:1fr;
   }
+  
+  .profile-title{
+  font-size:18px;
+  line-height:1.05;
+  white-space:normal;
+}
 }
 </style>
 </head>
@@ -186,8 +193,7 @@ body{
       <div class="profile-header">
         <img id="avatar">
         <div class="profile-text">
-          <h1 style="margin:0; font-family:'Playfair Display', serif; font-size:20px; line-height:1.05; white-space:nowrap;">
-  <h1 class="profile-title">
+          <h1 class="profile-title">
   <a id="profileName" href="https://thequietclub.site" style="text-decoration:none; color:inherit; font:inherit;">
   </a>
 </h1>
