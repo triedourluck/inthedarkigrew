@@ -334,12 +334,8 @@ async function loadSite(){
 
   const postsContainer = document.getElementById("postsContainer");
 
-  const params = new URLSearchParams(window.location.search);
-const targetPost = params.get("post");
-
 postsSnap.forEach(docItem => {
 
-  if(targetPost && docItem.id !== targetPost) return;
     const post = docItem.data();
 
     const div = document.createElement("div");
@@ -405,6 +401,14 @@ shareBtn.addEventListener("click", async () => {
     postsContainer.appendChild(div);
   });
 }
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".post-menu")) {
+    document.querySelectorAll(".post-menu").forEach(menu => {
+      menu.classList.remove("active");
+    });
+  }
+});
 
 loadSite();
 </script>
