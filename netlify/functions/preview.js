@@ -1,6 +1,6 @@
 exports.handler = async function(event) {
-const id = event.path.split("/").pop();
-  const siteUrl = "https://spontaneous-khapse-f57661.netlify.app";
+  const id = event.queryStringParameters.id;
+  const siteUrl = "https://thequietclub.site";
 
   const firestoreUrl = `https://firestore.googleapis.com/v1/projects/thequietclub/databases/(default)/documents/posts/${id}`;
 
@@ -18,11 +18,11 @@ const id = event.path.split("/").pop();
 
     let image = `${siteUrl}/default.jpg`;
 
-const imageValues = fields.images?.arrayValue?.values;
+    const imageValues = fields.images?.arrayValue?.values;
 
-if (Array.isArray(imageValues) && imageValues.length > 0) {
-  image = imageValues[0].stringValue;
-}
+    if (Array.isArray(imageValues) && imageValues.length > 0) {
+      image = imageValues[0].stringValue;
+    }
 
     return {
       statusCode: 200,
@@ -37,7 +37,7 @@ if (Array.isArray(imageValues) && imageValues.length > 0) {
           <title>${title}</title>
 
           <meta property="og:title" content="${title}">
-          <meta property="og:description" content="${text.substring(0, 160)}">
+          <meta property="og:description" content="${text.substring(0,160)}">
           <meta property="og:image" content="${image}">
           <meta property="og:type" content="article">
           <meta property="og:url" content="${siteUrl}/post.html?id=${id}">
@@ -57,7 +57,7 @@ if (Array.isArray(imageValues) && imageValues.length > 0) {
   } catch (error) {
     return {
       statusCode: 500,
-      body: "Error loading preview"
+      body: "Error loading preview";
     };
   }
 };
