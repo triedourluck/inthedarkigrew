@@ -4,13 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Quiet Club</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:#f6f6f4;
+  font-family:'Inter', sans-serif;
+  color:#222;
+}
+
+.layout{
+  max-width:900px;
+  margin:80px auto;
+  display:grid;
+  grid-template-columns:270px 520px;
+  gap:50px;
+  padding:0 24px;
+}
+
+.profile-column{
+  width:270px;
+}
+
+.profile-card,
+.description-card{
+  width:270px;
+  background:white;
+  padding:18px;
+  margin-bottom:12px;
+  box-sizing:border-box;
+}
+
+.profile-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+#avatar{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+}
+
+.profile-text h1{
+  margin:0;
+  font-family:'Playfair Display', serif;
+  font-size:20px;
+  line-height:1.05;
+}
+
+#profileUsername{
+  margin:2px 0 0 0;
+  font-size:14px;
+  color:#666;
+}
+
+#profileDescription{
+  margin:0;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.message-button{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-weight:600;
+  color:#666;
+  text-decoration:none;
+  margin-left:18px;
+}
+
+.posts-column{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  width:520px;
+}
+
+.post-box{
+  background:white;
+  padding:22px;
+  box-sizing:border-box;
+}
+
+.post-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  width:96%;
+  margin:0 auto 14px auto;
+}
+
+.post-image{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+}
+
+.single-image{
+  width:85%;
+  display:block;
+  margin:0 auto 14px auto;
+}
+
+.post-title{
+  font-family:'Playfair Display', serif;
+  font-size:18px;
+  margin:0 0 10px 0;
+}
+
+.post-text{
+  font-size:13px;
+  line-height:1.45;
+  white-space:pre-line;
+}
+
+.post-tag{
+  font-size:12px;
+  color:#777;
+  margin-top:10px;
+}
+
+.post-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
+@media(max-width:768px){
+  .layout{
+    grid-template-columns:1fr;
+    gap:32px;
+    margin:32px auto;
+    padding:0 16px;
+  }
+
+  .profile-column,
+  .profile-card,
+  .description-card,
+  .posts-column{
+    width:100%;
+  }
+}
+</style>
 </head>
+
 <body>
 
-<h1 id="name"></h1>
-<p id="alias"></p>
-<p id="description"></p>
-<div id="posts"></div>
+<div class="layout">
+
+  <div class="profile-column">
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <img id="avatar" src="">
+        <div class="profile-text">
+          <h1 id="profileName">The Quiet Club</h1>
+          <p id="profileUsername">@username</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="description-card">
+      <p id="profileDescription"></p>
+    </div>
+
+    <a id="messageLink" class="message-button" href="#" target="_blank">
+      Leave a message ✉️
+    </a>
+
+  </div>
+
+  <div class="posts-column" id="postsContainer"></div>
+
+</div>
 
 <script type="module">
 import { db } from "./firebase-config.js";
@@ -19,8 +194,7 @@ import {
   collection,
   getDocs,
   query,
-  where,
-  orderBy
+  where
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -71,18 +245,14 @@ async function loadSite(){
 
     let imagesHTML = "";
 
-    if(post.showImages !== false && post.images && post.images.length > 0){
+    if(post.showImages !== false && post.images?.length){
 
       if(post.images.length === 1){
-        imagesHTML = `
-          <img src="${post.images[0]}" class="post-image single-image">
-        `;
+        imagesHTML = `<img src="${post.images[0]}" class="post-image single-image">`;
       } else {
         imagesHTML = `
           <div class="post-grid">
-            ${post.images.map(url =>
-              `<img src="${url}" class="post-image">`
-            ).join("")}
+            ${post.images.map(url => `<img src="${url}" class="post-image">`).join("")}
           </div>
         `;
       }
@@ -95,47 +265,14 @@ async function loadSite(){
       ${imagesHTML}
       ${titleHTML}
       <p class="post-text">${post.text || ""}</p>
-
       <div class="post-footer">
         ${tagHTML}
-
-        <div class="post-menu">
-          <button class="menu-btn">⋯</button>
-          <div class="menu-dropdown">
-            <button class="share-btn">Share</button>
-          </div>
-        </div>
       </div>
     `;
-
-    const menuBtn = div.querySelector(".menu-btn");
-    const postMenu = div.querySelector(".post-menu");
-    const shareBtn = div.querySelector(".share-btn");
-
-    menuBtn.addEventListener("click", () => {
-      postMenu.classList.toggle("active");
-    });
-
-    shareBtn.addEventListener("click", async () => {
-      const link = `https://thequietclub.site/api/share/post?id=${docItem.id}`;
-
-      await navigator.clipboard.writeText(link);
-      alert("Link copied");
-
-      postMenu.classList.remove("active");
-    });
 
     postsContainer.appendChild(div);
   });
 }
-
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".post-menu")) {
-    document.querySelectorAll(".post-menu").forEach(menu => {
-      menu.classList.remove("active");
-    });
-  }
-});
 
 loadSite();
 </script>
