@@ -251,12 +251,14 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
 
     let imageUrls = [];
 
-    for (let file of selectedFiles) {
-      const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      imageUrls.push(url);
-    }
+const files = Array.from(document.getElementById("imageInput").files);
+
+for (let file of files) {
+  const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
+  imageUrls.push(url);
+}
 
     await addDoc(collection(db, "posts"), {
   title,
