@@ -103,27 +103,36 @@ import {
 
 document.getElementById("signupBtn").addEventListener("click", async () => {
 
-  const name = document.getElementById("name").value;
-  const alias = document.getElementById("alias").value.trim().toLowerCase();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const q = query(collection(db,"users"), where("alias","==",alias));
-const aliasCheck = await getDocs(q);
+  try{
 
-if(!alias || aliasCheck.size > 0){
-  alert("Username already exists");
-  return;
-}
+    const name = document.getElementById("name").value;
+    const alias = document.getElementById("alias").value.trim().toLowerCase();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const q = query(collection(db,"users"), where("alias","==",alias));
+    const aliasCheck = await getDocs(q);
 
-  await setDoc(doc(db,"users",userCredential.user.uid),{
-    name,
-    alias,
-    email
-  });
+    if(!alias || aliasCheck.size > 0){
+      alert("Username already exists");
+      return;
+    }
 
-  window.location.href = "atelier.html";
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+    await setDoc(doc(db,"users",userCredential.user.uid),{
+      name,
+      alias,
+      email
+    });
+
+    window.location.href = "atelier.html";
+
+  } catch(error){
+    alert(error.message);
+    console.log(error);
+  }
+
 });
 
 const togglePassword = document.getElementById("togglePassword");
