@@ -1,5 +1,5 @@
 exports.handler = async function(event) {
-  const id = event.queryStringParameters.id;
+  const id = event.queryStringParameters.id || event.path.split("/").pop();
   const siteUrl = "https://spontaneous-khapse-f57661.netlify.app";
 
   const firestoreUrl = `https://firestore.googleapis.com/v1/projects/thequietclub/databases/(default)/documents/posts/${id}`;
