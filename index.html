@@ -371,6 +371,9 @@ div.innerHTML = `
   ${imagesHTML}
   ${titleHTML}
   <p class="post-text">${post.text || ""}</p>
+
+  
+  <div class="post-footer">
   ${tagHTML}
 
   <div class="post-menu">
@@ -379,6 +382,7 @@ div.innerHTML = `
       <button class="share-btn">Share</button>
     </div>
   </div>
+</div>
 `;
 
 const menuBtn = div.querySelector(".menu-btn");
