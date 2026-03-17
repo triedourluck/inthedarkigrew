@@ -115,6 +115,16 @@ button {
 <section>
 <h2>Nuevo post</h2>
 
+<input type="text" id="postTitle" placeholder="Title" style="
+width:100%;
+padding:10px;
+margin-bottom:10px;
+border:1px solid #ddd;
+font-family:'Inter', sans-serif;
+font-size:13px;
+box-sizing:border-box;
+">
+
 <textarea id="postText" placeholder="Escribe aquí..."></textarea>
 <input type="text" id="tagInput" placeholder="tag">
 
@@ -228,6 +238,7 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
 document.getElementById("publishBtn").addEventListener("click", async () => {
   try {
     const text = document.getElementById("postText").value.trim();
+    const title = document.getElementById("postTitle").value;
     const tag = document.getElementById("tagInput").value.trim().toLowerCase();
     const status = document.getElementById("status");
 
@@ -241,6 +252,7 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
     }
 
     await addDoc(collection(db, "posts"), {
+      title
       text,
       tag,
       images: imageUrls,
@@ -249,6 +261,7 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
 
     status.textContent = "Publicado.";
 
+    document.getElementById("postTitle").value = "";
     document.getElementById("postText").value = "";
     document.getElementById("tagInput").value = "";
     preview.innerHTML = "";
