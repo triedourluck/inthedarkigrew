@@ -7,13 +7,13 @@ export default async function handler(req, res) {
   const data = await response.json();
 
   if (!data.fields) {
-    return res.redirect("https://quietclub-preview.vercel.app");
+    return res.redirect("https://thequietclub.site");
   }
 
   const text = data.fields.text?.stringValue || "";
   const image =
     data.fields.images?.arrayValue?.values?.[0]?.stringValue ||
-    "https://quietclub-preview.vercel.app/default.jpg";
+    "https://thequietclub.site/default.jpg";
 
   res.setHeader("Content-Type", "text/html");
 
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://quietclub-preview.vercel.app/post.html?id=${id}" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta http-equiv="refresh" content="0; url=https://quietclub-preview.vercel.app/post.html?id=${id}" />
+        <meta http-equiv="refresh" content="0; url=https://thequietclub.site/post.html?id=${id}" />
       </head>
       <body></body>
     </html>
