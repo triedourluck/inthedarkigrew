@@ -298,7 +298,7 @@ async function loadPosts() {
   const postsList = document.getElementById("postsList");
   postsList.innerHTML = "";
 
-  const postsQuery = query(
+const postsQuery = query(
   collection(db, "posts"),
   where("uid", "==", currentUser.uid)
 );
