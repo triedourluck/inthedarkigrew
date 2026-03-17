@@ -390,7 +390,7 @@ menuBtn.addEventListener("click", () => {
 });
 
 shareBtn.addEventListener("click", async () => {
-  const link = `https://thequietclub.site/post.html?id=${docItem.id}`;
+  const link = `https://thequietclub.site/share.html?id=${docItem.id}`;
 
   await navigator.clipboard.writeText(link);
   alert("Link copied");
