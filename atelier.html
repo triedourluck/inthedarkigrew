@@ -166,7 +166,9 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 import {
@@ -266,6 +268,7 @@ for (let file of files) {
 }
 
     await addDoc(collection(db, "posts"), {
+  uid: currentUser.uid,
   title,
   text,
   tag,
@@ -295,7 +298,12 @@ async function loadPosts() {
   const postsList = document.getElementById("postsList");
   postsList.innerHTML = "";
 
-  const snap = await getDocs(collection(db, "posts"));
+  const postsQuery = query(
+  collection(db, "posts"),
+  where("uid", "==", currentUser.uid)
+);
+
+const snap = await getDocs(postsQuery);
 
   snap.forEach(docItem => {
     const div = document.createElement("div");
