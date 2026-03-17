@@ -16,8 +16,16 @@ exports.handler = async function(event) {
 
     const text = fields.text?.stringValue || "Escribo por si algún día necesito recordar quién fui.";
 
-    const image = fields.images?.arrayValue?.values?.[0]?.stringValue
-      || `${siteUrl}/default.jpg`;
+    let image = `${siteUrl}/default.jpg`;
+
+if (
+  fields.images &&
+  fields.images.arrayValue &&
+  fields.images.arrayValue.values &&
+  fields.images.arrayValue.values.length > 0
+) {
+  image = fields.images.arrayValue.values[0].stringValue;
+}
 
     return {
       statusCode: 200,
