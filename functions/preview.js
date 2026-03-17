@@ -15,9 +15,14 @@ exports.handler = async (event) => {
         <meta property="og:image" content="https://thequietclub.site/default.jpg">
         <meta property="og:type" content="article">
         <meta name="twitter:card" content="summary_large_image">
-        <meta http-equiv="refresh" content="0; url=https://thequietclub.site/post.html?id=${id}">
       </head>
-      <body></body>
+      <body>
+        <script>
+          setTimeout(() => {
+            window.location.href = "https://thequietclub.site/post.html?id=${id}";
+          }, 1200);
+        </script>
+      </body>
       </html>
     `
   };
