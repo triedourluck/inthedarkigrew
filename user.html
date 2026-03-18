@@ -245,6 +245,10 @@ import {
 const params = new URLSearchParams(window.location.search);
 const alias = params.get("alias");
 
+if(alias){
+  history.replaceState({}, "", "/" + alias);
+}
+
 async function loadSite(){
 
   const userQuery = query(
