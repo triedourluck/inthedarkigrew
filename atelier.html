@@ -79,17 +79,6 @@ button {
   object-fit: cover;
 }
 
-.avatar-preview {
-  margin-top: 15px;
-}
-
-.avatar-preview img {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .status {
   margin-top: 15px;
   font-size: 14px;
@@ -117,10 +106,13 @@ button {
 <input type="text" id="description" placeholder="description">
 <input type="text" id="buttonLink" placeholder="leave a message link">
 <input type="file" id="avatarInput" accept="image/*">
-<p style="font-size:12px;color:#666;">Preview image (used when sharing your profile)</p>
+<p style="font-size:12px;color:#666;margin:10px 0 4px 0;">
+Preview de perfil
+</p>
 <input type="file" id="previewUpload" accept="image/*">
-<button id="savePreviewBtn">Guardar miniatura</button>
-<div class="avatar-preview" id="avatarPreview"></div>
+<button id="savePreviewBtn">Guardar preview</button>
+<input type="text" id="shareLink" readonly>
+<button id="copyShareBtn">Compártelo con preview</button>
 
 <div class="profile-actions">
   <button id="saveProfile">Guardar perfil</button>
@@ -254,6 +246,10 @@ async function loadProfile() {
     document.getElementById("username").value = data.alias || "";
     document.getElementById("description").value = data.description || "";
     document.getElementById("buttonLink").value = data.buttonLink || "";
+if(data.alias){
+  document.getElementById("shareLink").value =
+    `https://share.thequietclub.site/api/share/user?alias=${data.alias}`;
+}
 
     if (data.avatarURL) {
       currentAvatarURL = data.avatarURL;
