@@ -102,8 +102,15 @@ button{
 import { auth } from "./firebase-config.js";
 
 import {
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    window.location.href = "/atelier.html";
+  }
+});
 
 document.getElementById("loginBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
