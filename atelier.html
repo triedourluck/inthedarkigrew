@@ -117,7 +117,9 @@ button {
 <input type="text" id="description" placeholder="description">
 <input type="text" id="buttonLink" placeholder="leave a message link">
 <input type="file" id="avatarInput" accept="image/*">
-
+<p style="font-size:12px;color:#666;">Preview image (used when sharing your profile)</p>
+<input type="file" id="previewUpload" accept="image/*">
+<button id="savePreviewBtn">Guardar miniatura</button>
 <div class="avatar-preview" id="avatarPreview"></div>
 
 <div class="profile-actions">
@@ -216,6 +218,7 @@ import {
 
 let selectedFiles = [];
 let avatarFile = null;
+let previewFile = null;
 let currentAvatarURL = "";
 let currentUser;
 
@@ -236,6 +239,10 @@ imageInput.addEventListener("change", () => {
 
 document.getElementById("avatarInput").addEventListener("change", e => {
   avatarFile = e.target.files[0];
+});
+
+document.getElementById("previewUpload").addEventListener("change", e => {
+  previewFile = e.target.files[0];
 });
 
 async function loadProfile() {
@@ -265,29 +272,32 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
       await uploadBytes(avatarRef, avatarFile);
       avatarURL = await getDownloadURL(avatarRef);
     }
-    
-    const username = document.getElementById("username").value.replace("@","").trim().toLowerCase();
 
-const aliasQuery = query(
-  collection(db, "users"),
-  where("alias", "==", username)
-);
+    const username = document.getElementById("username").value
+      .replace("@","")
+      .trim()
+      .toLowerCase();
 
-const aliasSnap = await getDocs(aliasQuery);
+    const aliasQuery = query(
+      collection(db, "users"),
+      where("alias", "==", username)
+    );
 
-if (!aliasSnap.empty && aliasSnap.docs[0].id !== currentUser.uid) {
-  alert("Ese username ya está en uso");
-  return;
-}
+    const aliasSnap = await getDocs(aliasQuery);
 
-  await setDoc(doc(db, "users", currentUser.uid), {
-  name: "The Quiet Club",
-  alias: username,
-  description: document.getElementById("description").value,
-  buttonLink: document.getElementById("buttonLink").value,
-  buttonName: "Leave a message",
-  avatarURL
-}, { merge:true });
+    if (!aliasSnap.empty && aliasSnap.docs[0].id !== currentUser.uid) {
+      alert("Ese username ya está en uso");
+      return;
+    }
+
+    await setDoc(doc(db, "users", currentUser.uid), {
+      name: "The Quiet Club",
+      alias: username,
+      description: document.getElementById("description").value,
+      buttonLink: document.getElementById("buttonLink").value,
+      buttonName: "Leave a message",
+      avatarURL
+    }, { merge:true });
 
     currentAvatarURL = avatarURL;
 
@@ -296,6 +306,30 @@ if (!aliasSnap.empty && aliasSnap.docs[0].id !== currentUser.uid) {
   } catch (error) {
     console.error(error);
     alert("Error guardando perfil");
+  }
+});
+
+document.getElementById("savePreviewBtn").addEventListener("click", async () => {
+  try{
+    if(!previewFile){
+      alert("Primero sube una imagen");
+      return;
+    }
+
+    const previewRef = ref(storage, `preview/${Date.now()}_${previewFile.name}`);
+    await uploadBytes(previewRef, previewFile);
+
+    const previewImage = await getDownloadURL(previewRef);
+
+    await setDoc(doc(db,"users", currentUser.uid), {
+      previewImage
+    }, { merge:true });
+
+    alert("Miniatura guardada");
+
+  } catch(error){
+    console.error(error);
+    alert("Error guardando miniatura");
   }
 });
 
