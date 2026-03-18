@@ -34,6 +34,7 @@ export default async function handler(req, res) {
   const fields = doc.fields;
 
   const name = fields.name?.stringValue || "The Quiet Club";
+
   const image =
     fields.previewImage?.stringValue ||
     fields.avatarURL?.stringValue ||
@@ -49,7 +50,12 @@ export default async function handler(req, res) {
         <meta property="og:image" content="${image}" />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content="https://share.thequietclub.site/api/share/user?alias=${alias}" />
+
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="${name}" />
+        <meta name="twitter:description" content="@${alias}" />
+        <meta name="twitter:image" content="${image}" />
+
         <meta http-equiv="refresh" content="0; url=https://thequietclub.site/${alias}" />
       </head>
       <body></body>
