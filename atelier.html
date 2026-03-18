@@ -31,6 +31,7 @@ h2 {
 
 textarea,
 input[type="text"],
+input[type="password"],
 input[type="file"] {
   width: 100%;
   margin-top: 12px;
@@ -166,6 +167,15 @@ box-sizing:border-box;
 <div id="postsList" style="display:none;"></div>
 </section>
 
+<section>
+<h2>Contraseña</h2>
+
+<input type="password" id="newPassword" placeholder="Nueva contraseña">
+<input type="password" id="repeatPassword" placeholder="Repetir contraseña">
+
+<button id="savePasswordBtn">Guardar contraseña</button>
+</section>
+
 </div>
 
 <script type="module">
@@ -173,7 +183,8 @@ import { db, storage, auth } from "./firebase-config.js";
 
 import {
   onAuthStateChanged,
-  signOut
+signOut,
+updatePassword
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 import {
@@ -186,7 +197,8 @@ import {
   deleteDoc,
   serverTimestamp,
   query,
-  where
+  where,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 import {
@@ -365,11 +377,12 @@ async function loadPosts() {
 
 const postsQuery = query(
   collection(db, "posts"),
-  where("uid", "==", currentUser.uid)
+  where("uid", "==", currentUser.uid),
+  orderBy("createdAt", "desc")
 );
 
 const snap = await getDocs(postsQuery);
-const docs = snap.docs.reverse();
+const docs = snap.docs;
 
   docs.forEach(docItem => {
     const div = document.createElement("div");
@@ -433,6 +446,35 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "/login.html";
 });
+
+document.getElementById("savePasswordBtn").addEventListener("click", async () => {
+  const pass1 = document.getElementById("newPassword").value;
+  const pass2 = document.getElementById("repeatPassword").value;
+
+  if(pass1 !== pass2){
+    alert("Las contraseñas no coinciden");
+    return;
+  }
+
+  if(pass1.length < 6){
+    alert("Mínimo 6 caracteres");
+    return;
+  }
+
+  try {
+    await updatePassword(currentUser, pass1);
+
+    alert("Contraseña actualizada");
+
+    document.getElementById("newPassword").value = "";
+    document.getElementById("repeatPassword").value = "";
+
+  } catch(error){
+    console.error(error);
+    alert("Error al cambiar contraseña");
+  }
+});
+
 </script>
 
 </body>
