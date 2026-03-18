@@ -54,6 +54,16 @@ button {
   cursor: pointer;
 }
 
+.profile-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.profile-actions button{
+  flex:1;
+}
+
 .preview {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -109,7 +119,10 @@ button {
 
 <div class="avatar-preview" id="avatarPreview"></div>
 
-<button id="saveProfile">Guardar perfil</button>
+<div class="profile-actions">
+  <button id="saveProfile">Guardar perfil</button>
+  <button id="logoutBtn">Cerrar sesión</button>
+</div>
 </section>
 
 <section>
