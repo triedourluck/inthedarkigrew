@@ -104,7 +104,6 @@ body{
 
 .post-image{
   width:100%;
-  aspect-ratio:1/1;
   object-fit:cover;
 }
 
@@ -112,6 +111,9 @@ body{
   width:85%;
   display:block;
   margin:0 auto 14px auto;
+  height:auto;
+  object-fit:cover;
+  aspect-ratio:auto;
 }
 
 .post-title{
@@ -236,7 +238,8 @@ import {
   collection,
   getDocs,
   query,
-  where
+  where,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -270,9 +273,10 @@ async function loadSite(){
   }
 
   const postsQuery = query(
-    collection(db,"posts"),
-    where("uid","==",uid)
-  );
+  collection(db,"posts"),
+  where("uid","==",uid),
+  orderBy("createdAt","desc")
+);
 
   const postsSnap = await getDocs(postsQuery);
 
