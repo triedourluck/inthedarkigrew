@@ -74,7 +74,6 @@ button{
 
   <div class="title">Sign up</div>
 
-  <input id="name" placeholder="Name">
   <input id="alias" placeholder="Username (without @)">
   <input id="email" placeholder="Email">
   <div class="password-wrapper">
@@ -105,7 +104,6 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
 
   try{
 
-    const name = document.getElementById("name").value;
     const alias = document.getElementById("alias").value.trim().toLowerCase();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -113,7 +111,7 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
     const q = query(collection(db,"users"), where("alias","==",alias));
     const aliasCheck = await getDocs(q);
 
-    if(!alias || aliasCheck.size > 0){
+    if(!alias || alias.includes(" " ) || aliasCheck.size > 0){
       alert("Username already exists");
       return;
     }
@@ -121,7 +119,6 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     await setDoc(doc(db,"users",userCredential.user.uid),{
-      name,
       alias,
       email
     });
