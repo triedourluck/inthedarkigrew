@@ -543,6 +543,20 @@ await deleteDoc(doc(db, "users", currentUser.uid));
   }
 });
 
+document.getElementById("copyShareBtn").addEventListener("click", async () => {
+  try {
+    const link = document.getElementById("shareLink").value;
+
+    await navigator.clipboard.writeText(link);
+
+    alert("Copiado");
+
+  } catch(error){
+    console.error(error);
+    alert("No se pudo copiar");
+  }
+});
+
 </script>
 
 </body>
