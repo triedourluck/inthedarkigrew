@@ -221,7 +221,11 @@ body{
       <div class="profile-header">
         <img id="avatar" src="">
         <div class="profile-text">
-          <h1 id="profileName">The Quiet Club</h1>
+          <h1>
+  <a id="profileName" href="/" style="text-decoration:none; color:inherit;">
+    The Quiet Club
+  </a>
+</h1>
           <p id="profileUsername">@username</p>
         </div>
       </div>
@@ -242,7 +246,7 @@ body{
 </div>
 
 <script type="module">
-import { db } from "./firebase-config.js";
+import { db, auth } from "./firebase-config.js";
 
 import {
   collection,
@@ -251,6 +255,10 @@ import {
   where,
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 const params = new URLSearchParams(window.location.search);
 const alias = params.get("alias");
@@ -275,6 +283,15 @@ async function loadSite(){
   const uid = userDoc.id;
 
   document.getElementById("profileName").textContent = userData.name || "your name";
+  onAuthStateChanged(auth, (user) => {
+  const profileName = document.getElementById("profileName");
+
+  if(user){
+    profileName.href = "/atelier.html";
+  } else {
+    profileName.href = "/";
+  }
+});
   document.getElementById("profileUsername").textContent = "@" + (userData.alias || "");
   document.getElementById("profileDescription").textContent = userData.description || "";
 
