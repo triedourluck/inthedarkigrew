@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>atelier</title>
+<title>Atelier | The Quiet Club</title>
 
 <style>
 body {
@@ -62,6 +62,7 @@ button {
 
 .profile-actions button{
   flex:1;
+  min-width:0;
 }
 
 .preview {
@@ -111,7 +112,6 @@ button {
 <section>
 <h2>Configuración visual</h2>
 
-<input type="text" id="name" placeholder="your name">
 <input type="text" id="username" placeholder="@username">
 <input type="text" id="description" placeholder="description">
 <input type="text" id="buttonLink" placeholder="leave a message link">
@@ -121,6 +121,7 @@ button {
 
 <div class="profile-actions">
   <button id="saveProfile">Guardar perfil</button>
+  <button id="viewProfileBtn">Ver perfil</button>
   <button id="logoutBtn">Cerrar sesión</button>
 </div>
 </section>
@@ -220,7 +221,6 @@ async function loadProfile() {
   if (profileSnap.exists()) {
     const data = profileSnap.data();
 
-    document.getElementById("name").value = data.name || "";
     document.getElementById("username").value = data.alias || "";
     document.getElementById("description").value = data.description || "";
     document.getElementById("buttonLink").value = data.buttonLink || "";
@@ -244,7 +244,7 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
     }
 
     await setDoc(doc(db, "users", currentUser.uid), {
-      name: document.getElementById("name").value,
+      name: "The Quiet Club",
       alias: document.getElementById("username").value,
       description: document.getElementById("description").value,
       buttonLink: document.getElementById("buttonLink").value,
@@ -341,6 +341,14 @@ onAuthStateChanged(auth, user => {
     currentUser = user;
     loadProfile();
     loadPosts();
+  }
+});
+  
+  document.getElementById("viewProfileBtn").addEventListener("click", () => {
+  const username = document.getElementById("username").value.replace("@","").trim();
+
+  if(username){
+    window.open(`/user.html?alias=${username}`, "_blank");
   }
 });
 </script>
