@@ -258,11 +258,13 @@ async function loadPost(){
     if(userSnap.exists()){
       const data = userSnap.data();
 
-      document.getElementById("profileName").textContent = data.name || "The Quiet Club";
+      document.getElementById("profileName").textContent = "The Quiet Club";
       document.getElementById("profileUsername").textContent = "@" + (data.alias || "");
       document.getElementById("profileDescription").textContent = data.description || "";
-      document.getElementById("avatar").src = data.avatarURL || "";
-
+      
+      if(data.avatarURL){
+  document.getElementById("avatar").src = data.avatarURL;
+}
       if(data.buttonLink){
         document.getElementById("messageLink").href = data.buttonLink;
       }
