@@ -226,7 +226,9 @@ body{
     The Quiet Club
   </a>
 </h1>
-          <p id="profileUsername">@username</p>
+          <p>
+  <a id="profileUsername" style="text-decoration:none; color:#666;">@username</a>
+</p>
         </div>
       </div>
     </div>
@@ -292,7 +294,9 @@ async function loadSite(){
     profileName.href = "/";
   }
 });
-  document.getElementById("profileUsername").textContent = "@" + (userData.alias || "");
+const profileUsername = document.getElementById("profileUsername");
+profileUsername.textContent = "@" + (userData.alias || "");
+profileUsername.href = "/" + userData.alias;
   document.getElementById("profileDescription").textContent = userData.description || "";
 
   if(userData.avatarURL){
