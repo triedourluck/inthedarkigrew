@@ -176,6 +176,12 @@ box-sizing:border-box;
 <button id="savePasswordBtn">Guardar contraseña</button>
 </section>
 
+<section>
+<h2>Eliminar cuenta</h2>
+
+<button id="deleteAccountBtn">Eliminar cuenta permanentemente</button>
+</section>
+
 </div>
 
 <script type="module">
@@ -184,7 +190,8 @@ import { db, storage, auth } from "./firebase-config.js";
 import {
   onAuthStateChanged,
 signOut,
-updatePassword
+updatePassword,
+deleteUser
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 import {
@@ -472,6 +479,37 @@ document.getElementById("savePasswordBtn").addEventListener("click", async () =>
   } catch(error){
     console.error(error);
     alert("Error al cambiar contraseña");
+  }
+});
+
+document.getElementById("deleteAccountBtn").addEventListener("click", async () => {
+  const confirmDelete = confirm("Esta acción eliminará tu cuenta, perfil y posts permanentemente.");
+
+  if (!confirmDelete) return;
+
+  try {
+    const postsQuery = query(
+      collection(db, "posts"),
+      where("uid", "==", currentUser.uid)
+    );
+
+    const snap = await getDocs(postsQuery);
+
+    await deleteUser(currentUser);
+
+for (const post of snap.docs) {
+  await deleteDoc(doc(db, "posts", post.id));
+}
+
+await deleteDoc(doc(db, "users", currentUser.uid));
+
+    alert("Cuenta eliminada");
+
+    window.location.href = "/login.html";
+
+  } catch (error) {
+    console.error(error);
+    alert("Error al eliminar cuenta");
   }
 });
 
