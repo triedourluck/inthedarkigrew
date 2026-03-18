@@ -159,8 +159,11 @@ box-sizing:border-box;
 </section>
 
 <section>
-<h2>Posts publicados</h2>
-<div id="postsList"></div>
+<div class="profile-actions">
+  <button id="togglePostsBtn">Ver posts</button>
+</div>
+
+<div id="postsList" style="display:none;"></div>
 </section>
 
 </div>
@@ -169,7 +172,8 @@ box-sizing:border-box;
 import { db, storage, auth } from "./firebase-config.js";
 
 import {
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 import {
@@ -242,15 +246,29 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
       await uploadBytes(avatarRef, avatarFile);
       avatarURL = await getDownloadURL(avatarRef);
     }
+    
+    const username = document.getElementById("username").value.replace("@","").trim().toLowerCase();
 
-    await setDoc(doc(db, "users", currentUser.uid), {
-      name: "The Quiet Club",
-      alias: document.getElementById("username").value,
-      description: document.getElementById("description").value,
-      buttonLink: document.getElementById("buttonLink").value,
-      buttonName: "Leave a message",
-      avatarURL
-    });
+const aliasQuery = query(
+  collection(db, "users"),
+  where("alias", "==", username)
+);
+
+const aliasSnap = await getDocs(aliasQuery);
+
+if (!aliasSnap.empty && aliasSnap.docs[0].id !== currentUser.uid) {
+  alert("Ese username ya está en uso");
+  return;
+}
+
+  await setDoc(doc(db, "users", currentUser.uid), {
+  name: "The Quiet Club",
+  alias: username,
+  description: document.getElementById("description").value,
+  buttonLink: document.getElementById("buttonLink").value,
+  buttonName: "Leave a message",
+  avatarURL
+}, { merge:true });
 
     currentAvatarURL = avatarURL;
 
@@ -280,6 +298,39 @@ for (let file of files) {
   imageUrls.push(url);
 }
 
+let existingImages = [];
+let oldDoc = null;
+
+if(window.editingPostId){
+  oldDoc = await getDoc(doc(db,"posts",window.editingPostId));
+  existingImages = oldDoc.data().images || [];
+}
+
+    if(window.editingPostId){
+  await setDoc(doc(db,"posts",window.editingPostId), {
+    title,
+    text,
+    tag,
+    images: imageUrls.length ? imageUrls : existingImages,
+    showImages: document.getElementById("showImages").checked,
+    uid: currentUser.uid,
+    createdAt: oldDoc.data().createdAt
+  });
+
+  window.editingPostId = null;
+loadPosts();
+document.getElementById("postTitle").value = "";
+document.getElementById("postText").value = "";
+document.getElementById("tagInput").value = "";
+preview.innerHTML = "";
+document.getElementById("imageInput").value = "";
+
+selectedFiles = [];
+document.getElementById("status").textContent = "Post actualizado.";
+
+return;
+}
+    
     await addDoc(collection(db, "posts"), {
   uid: currentUser.uid,
   title,
@@ -292,14 +343,15 @@ for (let file of files) {
 
     status.textContent = "Publicado.";
 
-    document.getElementById("postTitle").value = "";
-    document.getElementById("postText").value = "";
-    document.getElementById("tagInput").value = "";
-    document.getElementById("showImages").checked = true;
-    preview.innerHTML = "";
-    selectedFiles = [];
+document.getElementById("postTitle").value = "";
+document.getElementById("postText").value = "";
+document.getElementById("tagInput").value = "";
+document.getElementById("showImages").checked = true;
+preview.innerHTML = "";
+document.getElementById("imageInput").value = "";
+selectedFiles = [];
 
-    loadPosts();
+loadPosts();
 
   } catch (error) {
     console.error(error);
@@ -317,17 +369,28 @@ const postsQuery = query(
 );
 
 const snap = await getDocs(postsQuery);
+const docs = snap.docs.reverse();
 
-  snap.forEach(docItem => {
+  docs.forEach(docItem => {
     const div = document.createElement("div");
     div.className = "post-item";
 
     div.innerHTML = `
       <p>${docItem.data().text || "(sin texto)"}</p>
-      <button data-id="${docItem.id}">Eliminar</button>
+      <button class="editBtn">Editar</button>
+<button class="deleteBtn" data-id="${docItem.id}">Eliminar</button>
     `;
+    
+    div.querySelector(".editBtn").addEventListener("click", () => {
+  document.getElementById("postText").value = docItem.data().text || "";
+  document.getElementById("postTitle").value = docItem.data().title || "";
+  document.getElementById("tagInput").value = docItem.data().tag || "";
+document.getElementById("showImages").checked = docItem.data().showImages !== false;
+  
+  window.editingPostId = docItem.id;
+});
 
-    div.querySelector("button").addEventListener("click", async () => {
+    div.querySelector(".deleteBtn").addEventListener("click", async () => {
       await deleteDoc(doc(db, "posts", docItem.id));
       loadPosts();
     });
@@ -341,15 +404,32 @@ onAuthStateChanged(auth, user => {
     currentUser = user;
     loadProfile();
     loadPosts();
+  } else {
+    window.location.href = "/login.html";
   }
 });
   
   document.getElementById("viewProfileBtn").addEventListener("click", () => {
-  const username = document.getElementById("username").value.replace("@","").trim();
+  const username = document.getElementById("username").value.replace("@","").trim().toLowerCase();
 
   if(username){
     window.open(`/user.html?alias=${username}`, "_blank");
   }
+});
+
+document.getElementById("togglePostsBtn").addEventListener("click", () => {
+  const posts = document.getElementById("postsList");
+
+  if(posts.style.display === "none"){
+    posts.style.display = "block";
+  } else {
+    posts.style.display = "none";
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "/login.html";
 });
 </script>
 
