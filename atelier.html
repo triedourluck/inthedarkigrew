@@ -381,7 +381,9 @@ const docs = snap.docs.reverse();
 <button class="deleteBtn" data-id="${docItem.id}">Eliminar</button>
     `;
     
-    div.querySelector(".editBtn").addEventListener("click", () => {
+  const editBtn = div.querySelector(".editBtn");
+
+editBtn.addEventListener("click", () => {
   document.getElementById("postText").value = docItem.data().text || "";
   document.getElementById("postTitle").value = docItem.data().title || "";
   document.getElementById("tagInput").value = docItem.data().tag || "";
