@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+const path = window.location.pathname.replace("/", "");
+
+if(path){
+  window.location.replace(`/user.html?alias=${path}`);
+}
+</script>
+</head>
+<body></body>
+</html>
