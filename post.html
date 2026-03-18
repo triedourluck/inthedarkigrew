@@ -259,7 +259,7 @@ async function loadPost(){
       const data = userSnap.data();
 
       document.getElementById("profileName").textContent = "The Quiet Club";
-      document.getElementById("profileUsername").textContent = "@" + (data.alias || "");
+      document.getElementById("profileUsername").innerHTML = `<a href="https://thequietclub.site/${data.alias}" style="color:inherit; text-decoration:none;">@${data.alias}</a>`;
       document.getElementById("profileDescription").textContent = data.description || "";
       
       if(data.avatarURL){
