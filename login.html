@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — The Quiet Club</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:#f6f6f4;
+  font-family:'Inter', sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.login-box{
+  width:320px;
+  background:white;
+  padding:32px;
+  box-sizing:border-box;
+}
+
+h1{
+  font-family:'Playfair Display', serif;
+  font-size:24px;
+  font-weight:400;
+  margin:0 0 24px 0;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border:1px solid #ddd;
+  font-size:14px;
+  box-sizing:border-box;
+}
+
+.password-wrap{
+  position:relative;
+}
+
+.eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:14px;
+  color:#666;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  background:black;
+  color:white;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.link{
+  margin-top:14px;
+  font-size:13px;
+  color:#666;
+  text-align:center;
+}
+
+.link a{
+  color:#222;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+  <h1>Login</h1>
+
+  <input id="email" type="email" placeholder="Email">
+
+  <div class="password-wrap">
+    <input id="password" type="password" placeholder="Password">
+    <span class="eye" id="togglePassword">👁</span>
+  </div>
+
+  <button id="loginBtn">Enter</button>
+
+  <div class="link">
+    <a href="/signup.html">Create account</a>
+  </div>
+</div>
+
+<script type="module">
+import { auth } from "./firebase-config.js";
+
+import {
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "/atelier.html";
+  }catch(error){
+    alert("Correo o contraseña incorrectos");
+    console.error(error);
+  }
+});
+
+document.getElementById("togglePassword").addEventListener("click", () => {
+  const password = document.getElementById("password");
+
+  password.type = password.type === "password" ? "text" : "password";
+});
+</script>
+
+</body>
+</html>
