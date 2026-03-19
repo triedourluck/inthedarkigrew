@@ -113,36 +113,17 @@ body{
   margin:0 auto 14px auto;
 }
 
-.post-images {
-  display: grid;
-  gap: 8px;
-  margin-top: 12px;
-  width: 100%;
+.post-image{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  display:block;
 }
-
-.post-images img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
-  border-radius: 0;
-}
-
-.post-images.two {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.post-images.three {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.post-images.three img:nth-child(3) {
-  grid-column: span 2;
-  aspect-ratio: 2 / 1;
-}
-
-.post-images.four {
-  grid-template-columns: repeat(2, 1fr);
+ 
+ .single-image{
+  width:85%;
+  display:block;
+  margin:0 auto 14px auto;
 }
 
 .post-title{
