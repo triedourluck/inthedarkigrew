@@ -171,8 +171,28 @@ body{
   }
 
   .post-grid{
-    grid-template-columns:1fr;
-  }
+  display:grid;
+  gap:8px;
+  width:96%;
+  margin:0 auto 14px auto;
+}
+
+.post-grid.two{
+  grid-template-columns:repeat(2,1fr);
+}
+
+.post-grid.three{
+  grid-template-columns:repeat(2,1fr);
+}
+
+.post-grid.three img:nth-child(3){
+  grid-column:span 2;
+  aspect-ratio:2/1;
+}
+
+.post-grid.four{
+  grid-template-columns:repeat(2,1fr);
+}
   
   .profile-title{
   font-size:18px;
@@ -299,9 +319,13 @@ onAuthStateChanged(auth, (user) => {
         imagesHTML = `<img src="${images[0]}" class="post-image single-image">`;
       } else {
         imagesHTML = `
-          <div class="post-grid">
-            ${images.map(url => `<img src="${url}" class="post-image">`).join("")}
-          </div>
+          <div class="post-grid ${
+  images.length === 2 ? "two" :
+  images.length === 3 ? "three" :
+  images.length === 4 ? "four" : ""
+}">
+  ${images.map(url => `<img src="${url}" class="post-image">`).join("")}
+</div>
         `;
       }
     }
