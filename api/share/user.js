@@ -45,14 +45,14 @@ export default async function handler(req, res) {
   res.send(`
     <html>
       <head>
-        <meta property="og:title" content="${name}" />
+        <meta property="og:title" content="@${alias}'s profile — The Quiet Club" />
         <meta property="og:description" content="@${alias}" />
         <meta property="og:image" content="${image}" />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content="https://share.thequietclub.site/api/share/user?alias=${alias}" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="${name}" />
+        <meta name="twitter:title" content="@${alias}'s profile — The Quiet Club" />
         <meta name="twitter:description" content="@${alias}" />
         <meta name="twitter:image" content="${image}" />
 
