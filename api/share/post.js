@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   res.send(`
     <html>
       <head>
-        <meta property="og:title" content="The Quiet Club" />
+        <meta property="og:title" content="${text.slice(0, 60)} — The Quiet Club" />
         <meta property="og:description" content="${text.slice(0, 140)}" />
         <meta property="og:image" content="${image}" />
         <meta property="og:type" content="article" />
