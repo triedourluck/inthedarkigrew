@@ -9,8 +9,19 @@ export default async function handler(req, res) {
   if (!data.fields) {
     return res.redirect("https://thequietclub.site");
   }
+  
+  const alias = data.fields.alias?.stringValue;
 
-  const text = data.fields.text?.stringValue || "";
+  const rawText = data.fields.text?.stringValue || "";
+
+// título = primera línea
+let title = rawText.split("\n")[0].trim();
+
+// fallback si no hay título real
+if (!title) {
+  title = `@${alias}'s post — The Quiet Club`;
+} 
+
   const image =
     data.fields.images?.arrayValue?.values?.[0]?.stringValue ||
     "https://thequietclub.site/default.jpg";
