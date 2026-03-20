@@ -12,15 +12,14 @@ export default async function handler(req, res) {
   
   const alias = data.fields.alias?.stringValue;
 
-  const rawText = data.fields.text?.stringValue || "";
+const rawText = data.fields.text?.stringValue || "";
 
 // título = primera línea
 let title = rawText.split("\n")[0].trim();
 
-// fallback si no hay título real
 if (!title) {
-  title = `@${alias}'s post — The Quiet Club`;
-} 
+  title = `@${alias}'s post`;
+}
 
   const image =
     data.fields.images?.arrayValue?.values?.[0]?.stringValue ||
@@ -31,7 +30,7 @@ if (!title) {
   res.send(`
     <html>
       <head>
-        <meta property="og:title" content="${text.slice(0, 60)} — The Quiet Club" />
+        <meta property="og:title" content="${title.slice(0, 60)} — The Quiet Club" />
         <meta property="og:description" content="${text.slice(0, 140)}" />
         <meta property="og:image" content="${image}" />
         <meta property="og:type" content="article" />
