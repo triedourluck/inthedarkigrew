@@ -3,22 +3,35 @@ export default async function handler(req, res) {
 
   const url = `https://firestore.googleapis.com/v1/projects/thequietclub-7265a/databases/(default)/documents/posts/${id}`;
 
+  let data;
+
+try {
   const response = await fetch(url);
-  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error("Firestore failed");
+  }
+
+  data = await response.json();
+} catch (err) {
+  console.error(err);
+  return res.redirect("https://thequietclub.site");
+}
 
   if (!data.fields) {
     return res.redirect("https://thequietclub.site");
   }
   
-  const alias = data.fields.alias?.stringValue;
+const alias = data.fields?.alias?.stringValue || "";
 
-const rawText = data.fields.text?.stringValue || "";
+const rawText = data.fields?.text?.stringValue || "";
 
-// título = primera línea
-let title = rawText.split("\n")[0].trim();
+// título = primera línea (seguro)
+let title = rawText ? rawText.split("\n")[0].trim() : "";
 
+// fallback limpio
 if (!title) {
-  title = `@${alias}'s post`;
+  title = alias ? `@${alias}'s post` : "The Quiet Club";
 }
 
   const image =
@@ -30,7 +43,7 @@ if (!title) {
   res.send(`
     <html>
       <head>
-        <meta property="og:title" content="${title.slice(0, 60)} — The Quiet Club" />
+        <meta property="og:title" content="${title} — The Quiet Club" />
         <meta property="og:description" content="${text.slice(0, 140)}" />
         <meta property="og:image" content="${image}" />
         <meta property="og:type" content="article" />
