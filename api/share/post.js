@@ -44,7 +44,7 @@ if (!title) {
     <html>
       <head>
         <meta property="og:title" content="${title} — The Quiet Club" />
-        <meta property="og:description" content="${text.slice(0, 140)}" />
+        <meta property="og:description" content="${rawText.replace(/\n/g, ' ').slice(0, 140)}" />
         <meta property="og:image" content="${image}" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://quietclub-preview.vercel.app/post.html?id=${id}" />
