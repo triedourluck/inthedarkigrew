@@ -26,10 +26,14 @@ const alias = data.fields?.alias?.stringValue || "";
 
 const rawText = data.fields?.text?.stringValue || "";
 
-// título = primera línea (seguro)
-let title = rawText ? rawText.split("\n")[0].trim() : "";
+const firestoreTitle = data.fields?.title?.stringValue || "";
 
-// fallback limpio
+let title = firestoreTitle;
+
+if (!title) {
+  title = rawText ? rawText.split("\n")[0].trim() : "";
+}
+
 if (!title) {
   title = alias ? `@${alias}'s post` : "The Quiet Club";
 }
